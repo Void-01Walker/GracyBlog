@@ -1,0 +1,2165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+
+<!-- ── Primary SEO ── -->
+<title>GracyBlog — Grace Apenda | Paediatric Pharmacist &amp; Writer</title>
+<meta name="description" content="GracyBlog is the personal blog of Grace Apenda — Paediatric Pharmacist at Port Moresby General Hospital, Papua New Guinea. Writing on medicine, health, culture, and everyday life."/>
+<meta name="keywords" content="GracyBlog, Grace Apenda, pharmacist, Papua New Guinea, Port Moresby, paediatric pharmacy, health, medicine, culture, writing"/>
+<meta name="author" content="Grace Apenda"/>
+<meta name="robots" content="index, follow"/>
+<meta name="theme-color" content="#1a1714"/>
+<link rel="canonical" href="https://gracyblog.netlify.app/"/>
+
+<!-- ── Open Graph ── -->
+<meta property="og:type"        content="website"/>
+<meta property="og:site_name"   content="GracyBlog"/>
+<meta property="og:locale"      content="en_PG"/>
+<meta property="og:title"       content="GracyBlog — Grace Apenda | Paediatric Pharmacist &amp; Writer"/>
+<meta property="og:description" content="Thoughtful writing on medicine, health, culture, and life from a paediatric pharmacist in Papua New Guinea."/>
+<meta property="og:url"         content="https://gracyblog.netlify.app/"/>
+
+<!-- ── Twitter Card ── -->
+<meta name="twitter:card"        content="summary"/>
+<meta name="twitter:title"       content="GracyBlog — Grace Apenda"/>
+<meta name="twitter:description" content="Thoughtful writing on medicine, health, culture, and life from a paediatric pharmacist in Papua New Guinea."/>
+<meta name="twitter:creator"     content="@graceapenda"/>
+
+<!-- ── JSON-LD Structured Data ── -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://gracyblog.netlify.app/#grace",
+      "name": "Grace Apenda",
+      "jobTitle": "Paediatric Pharmacist",
+      "worksFor": { "@type": "Organization", "name": "Port Moresby General Hospital" },
+      "address": { "@type": "PostalAddress", "addressLocality": "Port Moresby", "addressCountry": "PG" },
+      "url": "https://gracyblog.netlify.app/"
+    },
+    {
+      "@type": "Blog",
+      "@id": "https://gracyblog.netlify.app/#blog",
+      "name": "GracyBlog",
+      "description": "Personal blog by Grace Apenda — writing on medicine, health, culture, and life.",
+      "url": "https://gracyblog.netlify.app/",
+      "author": { "@id": "https://gracyblog.netlify.app/#grace" },
+      "inLanguage": "en"
+    }
+  ]
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1714;--ink-2:#3d3830;--ink-3:#7a7060;
+  --paper:#faf8f3;--paper-2:#f0ece2;--paper-3:#e5dfd0;
+  --accent:#c04a1a;--accent-2:#8a3210;--accent-pale:#fbeee8;
+  --green:#2d6a4f;--blue:#1a4a7a;--gold:#c8940a;
+  --admin-bg:#0f1117;--admin-panel:#181c25;--admin-border:#2a2f3d;
+  --admin-accent:#4f8ef7;--admin-accent-2:#3a6fd8;
+  --admin-text:#e8eaf0;--admin-muted:#8892a4;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --radius:4px;--trans:0.18s ease;
+}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height:100vh;font-size:15px;line-height:1.6}
+
+/* ── UTILS ── */
+.hidden{display:none!important}
+.btn{font-family:var(--sans);font-size:13px;font-weight:500;padding:7px 16px;border-radius:var(--radius);cursor:pointer;transition:all var(--trans);border:1.5px solid;letter-spacing:.02em}
+.btn-ghost{background:transparent;border-color:var(--ink-3);color:var(--ink-2)}
+.btn-ghost:hover{border-color:var(--ink);color:var(--ink)}
+.btn-solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-solid:hover{background:var(--accent-2);border-color:var(--accent-2)}
+.btn-admin{background:var(--admin-accent);border-color:var(--admin-accent);color:#fff;font-size:12px;padding:6px 14px}
+.btn-admin:hover{background:var(--admin-accent-2);border-color:var(--admin-accent-2)}
+.btn-danger{background:#c0392b;border-color:#c0392b;color:#fff;font-size:12px;padding:6px 12px}
+.btn-danger:hover{background:#a93226;border-color:#a93226}
+.btn-warn{background:#e67e22;border-color:#e67e22;color:#fff;font-size:12px;padding:6px 12px}
+.btn-warn:hover{background:#ca6f1e}
+
+/* ── PUBLIC NAV ── */
+#public-site nav{
+  border-bottom:1.5px solid var(--ink);padding:0 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  height:56px;background:var(--paper);position:sticky;top:0;z-index:100;
+}
+.nav-brand{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);letter-spacing:-.5px}
+.nav-brand span{color:var(--accent)}
+.nav-links{display:flex;gap:0}
+.nav-links button{background:none;border:none;cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);padding:0 14px;height:56px;border-bottom:2.5px solid transparent;transition:color var(--trans),border-color var(--trans)}
+.nav-links button:hover,.nav-links button.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-actions{display:flex;gap:8px;align-items:center}
+.admin-login-btn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border:1.5px solid var(--paper-3);border-radius:var(--radius);background:transparent;cursor:pointer;color:var(--ink-3);transition:all var(--trans)}
+.admin-login-btn:hover{border-color:var(--ink);color:var(--ink);background:var(--paper-2)}
+
+/* ── VIEWS ── */
+.view{display:none;animation:fadein .25s ease}
+.view.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO ── */
+.hero{border-bottom:1px solid var(--paper-3);background:var(--ink);color:var(--paper);padding:3.5rem 2rem 3rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+.hero-title{font-family:var(--serif);font-size:48px;font-weight:700;line-height:1.1;margin-bottom:1.25rem;letter-spacing:-1px}
+.hero-title em{color:var(--accent);font-style:italic}
+.hero-desc{font-size:16px;line-height:1.7;color:#b5b0a6;margin-bottom:2rem}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero-feature{border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:0;display:grid;grid-template-columns:1fr 1fr;background:#1e1a16}
+.feat-cell{padding:1.25rem;border:1px solid rgba(255,255,255,.06)}
+.feat-icon{font-size:20px;margin-bottom:8px;color:var(--accent)}
+.feat-label{font-size:12px;font-weight:500;color:#c8c2ba;margin-bottom:4px;letter-spacing:.02em}
+.feat-desc{font-size:11px;color:#7a7570;line-height:1.5}
+
+/* ── POSTS ── */
+.section-header{display:flex;align-items:baseline;justify-content:space-between;padding:2rem 2rem 1.25rem;border-bottom:1px solid var(--paper-3)}
+.section-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.5px}
+.section-link{font-size:12px;color:var(--accent);cursor:pointer;font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.section-link:hover{text-decoration:underline}
+.posts-layout{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--paper-3)}
+.post-card{padding:1.75rem 2rem;border-right:1px solid var(--paper-3);cursor:pointer;transition:background var(--trans)}
+.post-card:last-child{border-right:none}
+.post-card:hover{background:var(--accent-pale)}
+.post-card.featured{grid-column:span 2;padding:2rem 2.5rem;border-right:1px solid var(--paper-3);background:var(--paper-2)}
+.post-card.featured .post-title{font-size:28px;line-height:1.2}
+.post-card.featured .post-excerpt{font-size:15px;margin-top:10px}
+.post-tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:10px}
+.tag-tech{background:#dbeafe;color:#1e40af}.tag-design{background:#fce7f3;color:#9d174d}
+.tag-culture{background:#d1fae5;color:#065f46}.tag-opinion{background:#fef3c7;color:#92400e}
+.post-title{font-family:var(--serif);font-size:19px;font-weight:700;line-height:1.3;letter-spacing:-.3px;margin-bottom:8px;color:var(--ink)}
+.post-excerpt{font-size:13px;color:var(--ink-3);line-height:1.6;margin-bottom:14px}
+.post-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-3);letter-spacing:.02em}
+.author-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:#fff}
+.meta-sep{color:var(--paper-3)}
+
+/* ── BLOG LIST ── */
+.blog-controls{display:flex;align-items:center;gap:12px;padding:1.25rem 2rem;border-bottom:1px solid var(--paper-3);flex-wrap:wrap}
+.filter-btn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:20px;border:1.5px solid var(--paper-3);background:transparent;cursor:pointer;color:var(--ink-3);transition:all var(--trans)}
+.filter-btn:hover{border-color:var(--ink-2);color:var(--ink)}
+.filter-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.blog-search{margin-left:auto;font-family:var(--sans);font-size:13px;padding:7px 14px;border:1.5px solid var(--paper-3);border-radius:var(--radius);background:var(--paper);color:var(--ink);outline:none;width:220px;transition:border-color var(--trans)}
+.blog-search:focus{border-color:var(--accent)}
+.blog-list{padding:0 2rem 2rem}
+.blog-item{display:grid;grid-template-columns:40px 1fr;gap:1rem;align-items:start;padding:1.5rem 0;border-bottom:1px solid var(--paper-3);cursor:pointer;transition:padding var(--trans)}
+.blog-item:hover{padding-left:8px}
+.blog-item-num{font-family:var(--mono);font-size:11px;color:var(--paper-3);letter-spacing:.06em;padding-top:4px}
+.blog-item-title{font-family:var(--serif);font-size:21px;font-weight:700;line-height:1.3;color:var(--ink);margin-bottom:6px;letter-spacing:-.3px}
+.blog-item:hover .blog-item-title{color:var(--accent)}
+.blog-item-excerpt{font-size:13px;color:var(--ink-3);line-height:1.6;margin-bottom:10px}
+.blog-item-meta{display:flex;align-items:center;gap:8px}
+.reading-time{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.06em}
+
+/* ── POST VIEW ── */
+.post-back{padding:1rem 2rem;border-bottom:1px solid var(--paper-3);font-size:13px;color:var(--ink-3);cursor:pointer;display:flex;align-items:center;gap:6px;transition:color var(--trans)}
+.post-back:hover{color:var(--accent)}
+.post-full-header{padding:3rem 2rem 2rem;border-bottom:1.5px solid var(--ink);max-width:720px;margin:0 auto}
+.post-full-title{font-family:var(--serif);font-size:42px;font-weight:700;line-height:1.1;margin-bottom:1rem}
+.post-full-excerpt{font-size:18px;color:var(--ink-2);line-height:1.7;margin-bottom:1.5rem;font-style:italic;font-family:var(--serif)}
+.post-body{max-width:720px;margin:0 auto;padding:2.5rem 2rem;font-size:17px;line-height:1.8;color:var(--ink-2)}
+.post-body h2{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--ink);margin:2.5rem 0 1rem;letter-spacing:-.3px}
+.post-body p{margin-bottom:1.5rem}
+.post-body blockquote{border-left:3px solid var(--accent);padding:1rem 1.5rem;margin:2rem 0;background:var(--accent-pale);font-family:var(--serif);font-style:italic;font-size:20px;line-height:1.6;color:var(--ink)}
+.post-body code{font-family:var(--mono);font-size:13px;background:var(--paper-2);padding:2px 6px;border-radius:3px;color:var(--accent-2)}
+.post-body pre{background:var(--ink);color:#e8e4de;padding:1.5rem;border-radius:6px;margin:2rem 0;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.7}
+.post-body pre code{background:none;color:inherit;padding:0}
+
+/* ── ABOUT ── */
+.about-hero{background:var(--ink);color:var(--paper);padding:4rem 2rem;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.about-title{font-family:var(--serif);font-size:52px;font-weight:700;letter-spacing:-1.5px;line-height:1.05}
+.about-title em{color:var(--accent);font-style:italic}
+.about-desc{font-size:16px;line-height:1.8;color:#b5b0a6}
+.stats-strip{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--paper-3)}
+.stat-cell{padding:2rem;border-right:1px solid var(--paper-3);text-align:center}
+.stat-cell:last-child{border-right:none}
+.stat-num{font-family:var(--serif);font-size:42px;font-weight:700;color:var(--accent);line-height:1}
+.stat-label{font-size:12px;color:var(--ink-3);margin-top:6px;letter-spacing:.04em}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--paper-3)}
+.team-card{padding:2rem;border-right:1px solid var(--paper-3);border-bottom:1px solid var(--paper-3)}
+.team-card:nth-child(3n){border-right:none}
+.team-avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:20px;font-weight:700;color:#fff;margin-bottom:1rem;flex-shrink:0}
+.team-name{font-family:var(--serif);font-size:19px;font-weight:700;margin-bottom:4px}
+.team-role{font-size:12px;color:var(--accent);font-weight:500;letter-spacing:.04em;margin-bottom:10px;text-transform:uppercase;font-family:var(--mono)}
+.team-bio{font-size:13px;color:var(--ink-3);line-height:1.6}
+.team-info{flex:1;min-width:0}
+/* Single-author spotlight layout */
+.team-grid.solo{grid-template-columns:1fr;border-top:none}
+.team-grid.solo .team-card{display:flex;align-items:flex-start;gap:2rem;border-right:none;border-bottom:none;padding:2.5rem 2rem;max-width:680px}
+.team-grid.solo .team-avatar{width:80px;height:80px;font-size:26px;margin-bottom:0}
+.team-grid.solo .team-name{font-size:28px;margin-bottom:6px}
+.team-grid.solo .team-role{font-size:13px;margin-bottom:14px}
+.team-grid.solo .team-bio{font-size:15px;line-height:1.75;color:var(--ink-2)}
+
+/* ── LOGIN MODAL ── */
+#login-overlay{position:fixed;inset:0;background:rgba(15,17,23,.92);z-index:1000;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.login-box{background:var(--admin-panel);border:1px solid var(--admin-border);border-radius:12px;padding:2.5rem;width:400px;max-width:95vw;animation:fadein .3s ease}
+.login-brand{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--admin-text);margin-bottom:4px}
+.login-brand span{color:var(--admin-accent)}
+.login-sub{font-size:13px;color:var(--admin-muted);margin-bottom:2rem;font-family:var(--mono);letter-spacing:.04em}
+.login-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--admin-muted);margin-bottom:6px}
+.login-input{width:100%;background:#0f1117;border:1.5px solid var(--admin-border);border-radius:var(--radius);padding:10px 14px;color:var(--admin-text);font-family:var(--sans);font-size:14px;outline:none;transition:border-color var(--trans);margin-bottom:1rem}
+.login-input:focus{border-color:var(--admin-accent)}
+.login-error{background:#3d1515;border:1px solid #7a2020;border-radius:var(--radius);padding:10px 14px;color:#f08080;font-size:13px;margin-bottom:1rem;display:none}
+.login-btns{display:flex;gap:10px;margin-top:.5rem}
+.btn-login{flex:1;background:var(--admin-accent);border:none;border-radius:var(--radius);color:#fff;font-family:var(--sans);font-size:14px;font-weight:500;padding:11px;cursor:pointer;transition:background var(--trans)}
+.btn-login:hover{background:var(--admin-accent-2)}
+.btn-cancel{background:transparent;border:1.5px solid var(--admin-border);border-radius:var(--radius);color:var(--admin-muted);font-family:var(--sans);font-size:13px;padding:11px 16px;cursor:pointer;transition:all var(--trans)}
+.btn-cancel:hover{border-color:var(--admin-muted);color:var(--admin-text)}
+
+/* ── ADMIN SHELL ── */
+#admin-site{display:none;min-height:100vh;background:var(--admin-bg);color:var(--admin-text);font-family:var(--sans)}
+.admin-topbar{height:56px;background:var(--admin-panel);border-bottom:1px solid var(--admin-border);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;position:sticky;top:0;z-index:50}
+.admin-topbar-brand{font-family:var(--serif);font-size:18px;font-weight:700;color:var(--admin-text)}
+.admin-topbar-brand span{color:var(--admin-accent)}
+.admin-topbar-right{display:flex;align-items:center;gap:12px}
+.admin-user{font-family:var(--mono);font-size:11px;color:var(--admin-muted);letter-spacing:.06em}
+.admin-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 56px)}
+.admin-sidebar{background:var(--admin-panel);border-right:1px solid var(--admin-border);padding:1.5rem 0}
+.sidebar-section{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--admin-muted);padding:0 1.25rem 8px;margin-top:1.25rem}
+.sidebar-btn{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;padding:9px 1.25rem;cursor:pointer;color:var(--admin-muted);font-family:var(--sans);font-size:13px;font-weight:400;transition:all var(--trans);text-align:left;border-left:2px solid transparent}
+.sidebar-btn:hover{color:var(--admin-text);background:rgba(255,255,255,.04)}
+.sidebar-btn.active{color:var(--admin-accent);background:rgba(79,142,247,.08);border-left-color:var(--admin-accent)}
+.sidebar-icon{font-size:16px;width:18px;text-align:center}
+.admin-main{padding:2rem;overflow-y:auto}
+
+/* ── ADMIN PANELS ── */
+.admin-panel{display:none;animation:fadein .2s ease}
+.admin-panel.active{display:block}
+.admin-page-title{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--admin-text);margin-bottom:4px;letter-spacing:-.5px}
+.admin-page-sub{font-size:13px;color:var(--admin-muted);margin-bottom:2rem}
+
+/* ── ANALYTICS CARDS ── */
+.analytics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:2rem}
+.analytics-card{background:var(--admin-panel);border:1px solid var(--admin-border);border-radius:10px;padding:1.25rem 1.5rem}
+.analytics-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.analytics-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--admin-muted)}
+.analytics-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.analytics-num{font-family:var(--serif);font-size:34px;font-weight:700;color:var(--admin-text);line-height:1;margin-bottom:4px}
+.analytics-change{font-size:12px;font-family:var(--mono)}
+.analytics-change.up{color:#4caf87}.analytics-change.down{color:#e05252}
+.chart-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:2rem}
+.chart-card{background:var(--admin-panel);border:1px solid var(--admin-border);border-radius:10px;padding:1.5rem}
+.chart-title{font-size:14px;font-weight:500;color:var(--admin-text);margin-bottom:1.25rem}
+.mini-bar-chart{display:flex;align-items:flex-end;gap:6px;height:120px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bar-fill{width:100%;border-radius:4px 4px 0 0;background:var(--admin-accent);opacity:.7;transition:opacity .2s}
+.bar-fill:hover{opacity:1}
+.bar-label{font-family:var(--mono);font-size:9px;color:var(--admin-muted);letter-spacing:.06em}
+.donut-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;height:160px}
+.donut-legend{display:flex;flex-direction:column;gap:6px;width:100%}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--admin-muted)}
+.legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.activity-list{background:var(--admin-panel);border:1px solid var(--admin-border);border-radius:10px;padding:1.5rem;margin-bottom:2rem}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--admin-border)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.activity-text{font-size:13px;color:var(--admin-muted);line-height:1.5}
+.activity-text strong{color:var(--admin-text);font-weight:500}
+.activity-time{font-family:var(--mono);font-size:10px;color:var(--admin-muted);margin-left:auto;flex-shrink:0;padding-top:2px}
+
+/* ── POSTS TABLE ── */
+.posts-table-wrap{background:var(--admin-panel);border:1px solid var(--admin-border);border-radius:10px;overflow:hidden}
+.posts-table-toolbar{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid var(--admin-border)}
+.posts-table-toolbar h3{font-size:15px;font-weight:500;color:var(--admin-text)}
+table{width:100%;border-collapse:collapse}
+th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--admin-muted);padding:10px 16px;text-align:left;border-bottom:1px solid var(--admin-border);background:rgba(255,255,255,.02)}
+td{padding:12px 16px;border-bottom:1px solid var(--admin-border);font-size:13px;color:var(--admin-muted);vertical-align:middle}
+td:first-child{color:var(--admin-text);font-weight:500;max-width:260px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.td-actions{display:flex;gap:6px}
+.status-pill{font-family:var(--mono);font-size:10px;letter-spacing:.06em;padding:3px 8px;border-radius:20px;text-transform:uppercase}
+.status-pub{background:rgba(76,175,135,.15);color:#4caf87}
+.status-draft{background:rgba(255,193,7,.1);color:#ffc107}
+
+/* ── EDITOR MODAL ── */
+#editor-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:flex;align-items:flex-start;justify-content:center;padding:2rem;overflow-y:auto;backdrop-filter:blur(4px)}
+.editor-modal-box{background:var(--admin-panel);border:1px solid var(--admin-border);border-radius:12px;width:100%;max-width:900px;display:grid;grid-template-columns:1fr 1fr;min-height:80vh;overflow:hidden;animation:fadein .25s ease}
+.editor-modal-left{padding:1.5rem;border-right:1px solid var(--admin-border);display:flex;flex-direction:column;gap:12px}
+.editor-modal-right{padding:1.5rem;background:var(--paper-2);overflow-y:auto}
+.editor-modal-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:1rem;border-bottom:1px solid var(--admin-border);grid-column:span 2;padding:1rem 1.5rem;background:var(--admin-bg)}
+.editor-modal-title{font-size:15px;font-weight:500;color:var(--admin-text)}
+.em-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--admin-muted);margin-bottom:5px}
+.em-input{width:100%;background:#0f1117;border:1.5px solid var(--admin-border);border-radius:var(--radius);padding:9px 12px;color:var(--admin-text);font-family:var(--sans);font-size:14px;outline:none;transition:border-color var(--trans)}
+.em-input:focus{border-color:var(--admin-accent)}
+.em-title-input{font-family:var(--serif);font-size:20px;font-weight:700}
+.em-textarea{width:100%;background:#0f1117;border:1.5px solid var(--admin-border);border-radius:var(--radius);padding:9px 12px;color:var(--admin-text);font-family:var(--sans);font-size:13px;outline:none;resize:vertical;transition:border-color var(--trans);line-height:1.7}
+.em-textarea:focus{border-color:var(--admin-accent)}
+.em-body{min-height:280px}
+.em-select{width:100%;background:#0f1117;border:1.5px solid var(--admin-border);border-radius:var(--radius);padding:9px 12px;color:var(--admin-text);font-family:var(--sans);font-size:13px;outline:none}
+.em-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.em-toolbar{display:flex;gap:4px;flex-wrap:wrap;padding-bottom:10px;border-bottom:1px solid var(--admin-border)}
+.em-tool{font-family:var(--mono);font-size:10px;padding:4px 9px;border:1px solid var(--admin-border);border-radius:3px;background:transparent;cursor:pointer;color:var(--admin-muted);transition:all var(--trans)}
+.em-tool:hover{border-color:var(--admin-accent);color:var(--admin-accent)}
+.preview-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.preview-label::after{content:'';flex:1;height:1px;background:var(--paper-3)}
+.preview-title{font-family:var(--serif);font-size:28px;font-weight:700;line-height:1.2;color:var(--ink);margin-bottom:10px;letter-spacing:-.5px}
+.preview-excerpt{font-family:var(--serif);font-style:italic;font-size:15px;line-height:1.7;color:var(--ink-2);margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--paper-3)}
+.preview-body-text{font-size:13px;line-height:1.8;color:var(--ink-2);white-space:pre-wrap}
+
+/* ── SUBSCRIBERS / DONORS TABLE ── */
+.data-table-wrap{background:var(--admin-panel);border:1px solid var(--admin-border);border-radius:10px;overflow:hidden;margin-bottom:2rem}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--ink);color:var(--paper);padding:12px 20px;border-radius:6px;font-size:13px;font-weight:500;transform:translateY(80px);opacity:0;transition:all .3s ease;z-index:9999}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:#1a3d2b;border:1px solid #2d6a4f;color:#7dd3a8}
+.toast.error{background:#3d1515;border:1px solid #7a2020;color:#f08080}
+
+/* ── SUBSCRIBE MODAL ── */
+#subscribe-overlay{
+  position:fixed;inset:0;background:rgba(10,8,6,.88);z-index:1000;
+  display:flex;align-items:center;justify-content:center;padding:1.5rem;
+  backdrop-filter:blur(6px)
+}
+.subscribe-box{
+  background:var(--ink);border:1px solid rgba(255,255,255,.1);
+  border-radius:12px;width:100%;max-width:520px;overflow:hidden;
+  animation:fadein .3s ease;box-shadow:0 32px 64px rgba(0,0,0,.5)
+}
+.subscribe-top{padding:2rem 2rem 1.75rem}
+.subscribe-eyebrow{
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:.875rem;
+  display:flex;align-items:center;gap:10px
+}
+.subscribe-eyebrow::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+.subscribe-title{
+  font-family:var(--serif);font-size:32px;font-weight:700;
+  color:var(--paper);line-height:1.15;letter-spacing:-.75px;margin-bottom:.875rem
+}
+.subscribe-title em{color:var(--accent);font-style:italic}
+.subscribe-desc{font-size:14px;color:#b5b0a6;line-height:1.75;max-width:380px}
+.subscribe-embed{
+  background:var(--paper-2);border-top:1px solid rgba(255,255,255,.07);
+  padding:1.5rem 2rem
+}
+.subscribe-embed iframe{
+  display:block;width:100%;border:none;border-radius:var(--radius)
+}
+.subscribe-foot{
+  padding:.875rem 2rem;border-top:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(0,0,0,.18)
+}
+.subscribe-brand{
+  font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.22);letter-spacing:.06em
+}
+.subscribe-close-btn{
+  background:transparent;border:1.5px solid rgba(255,255,255,.18);
+  border-radius:var(--radius);padding:5px 14px;
+  color:rgba(255,255,255,.5);font-family:var(--sans);font-size:12px;
+  cursor:pointer;transition:all var(--trans);letter-spacing:.02em
+}
+.subscribe-close-btn:hover{border-color:rgba(255,255,255,.55);color:#fff}
+
+/* ── SUBSCRIBE FORM (custom, replaces iframe) ── */
+.subscribe-form{display:flex;flex-direction:column;gap:10px}
+.sub-field-wrap{display:flex;gap:8px}
+.sub-email-input{
+  flex:1;min-width:0;background:var(--paper);border:1.5px solid var(--paper-3);
+  border-radius:var(--radius);padding:11px 14px;
+  font-family:var(--sans);font-size:14px;color:var(--ink);outline:none;
+  transition:border-color var(--trans)
+}
+.sub-email-input:focus{border-color:var(--accent)}
+.sub-email-input::placeholder{color:var(--ink-3)}
+.sub-submit-btn{
+  background:var(--accent);border:none;border-radius:var(--radius);
+  padding:11px 20px;color:#fff;font-family:var(--sans);font-size:14px;
+  font-weight:500;cursor:pointer;transition:background var(--trans);white-space:nowrap
+}
+.sub-submit-btn:hover{background:var(--accent-2)}
+.sub-submit-btn:disabled{opacity:.6;cursor:not-allowed}
+.sub-note{font-family:var(--mono);font-size:10px;color:var(--ink-3);letter-spacing:.04em}
+.sub-msg{font-size:13px;font-weight:500;min-height:18px}
+.sub-msg.success{color:var(--green)}
+.sub-msg.error{color:#c0392b}
+
+@media(max-width:560px){
+  .subscribe-top{padding:1.5rem}
+  .subscribe-title{font-size:26px}
+  .subscribe-embed{padding:1.25rem 1.5rem}
+  .subscribe-foot{padding:.75rem 1.5rem}
+  .sub-field-wrap{flex-direction:column}
+  .sub-submit-btn{width:100%}
+}
+
+/* ── LAYOUT HELPERS (also used by responsive overrides) ── */
+.new-post-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.editor-inner{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden}
+
+/* ── HAMBURGER ── */
+.nav-burger{display:none;background:none;border:none;cursor:pointer;font-size:22px;color:var(--ink);padding:4px 6px;line-height:1;flex-shrink:0}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — 900 px (tablet/landscape)
+═══════════════════════════════════════ */
+@media(max-width:900px){
+  /* Admin: sidebar collapses into horizontal tab strip */
+  .admin-layout{grid-template-columns:1fr;min-height:auto}
+  .admin-sidebar{
+    padding:.25rem 0;border-right:none;border-bottom:1px solid var(--admin-border);
+    display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;scrollbar-color:var(--admin-border) transparent
+  }
+  .admin-sidebar::-webkit-scrollbar{height:4px}
+  .admin-sidebar::-webkit-scrollbar-thumb{background:var(--admin-border);border-radius:2px}
+  .sidebar-section{display:none}
+  .sidebar-btn{
+    flex-shrink:0;border-left:none!important;border-bottom:2.5px solid transparent;
+    padding:10px 16px;white-space:nowrap;font-size:12px;text-align:center
+  }
+  .sidebar-btn.active{
+    border-bottom-color:var(--admin-accent)!important;border-left:none!important;
+    background:rgba(79,142,247,.08)
+  }
+  /* Analytics cards: 2 per row */
+  .analytics-grid{grid-template-columns:repeat(2,1fr)!important}
+  /* Charts stack vertically */
+  .chart-row{grid-template-columns:1fr}
+  .admin-main{padding:1rem}
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — 700 px (mobile)
+═══════════════════════════════════════ */
+@media(max-width:700px){
+  /* ── Public Nav ── */
+  #public-site nav{padding:0 .875rem;gap:6px;position:relative}
+  .nav-links{
+    display:none;position:absolute;top:56px;left:0;right:0;
+    background:var(--paper);border-bottom:1.5px solid var(--ink);
+    z-index:99;flex-direction:column;animation:fadein .2s ease
+  }
+  .nav-links.nav-open{display:flex}
+  .nav-links button{
+    height:48px;border-bottom-width:0;border-top:1px solid var(--paper-3);
+    border-bottom:none!important;justify-content:flex-start;padding:0 1.25rem
+  }
+  .nav-links button:hover,.nav-links button.active{color:var(--accent);background:var(--accent-pale)}
+  .nav-burger{display:block}
+  .nav-actions .btn-ghost{display:none}
+  .admin-login-btn{font-size:10px;padding:5px 10px}
+
+  /* ── Hero ── */
+  .hero{grid-template-columns:1fr;padding:2rem 1rem;gap:1.5rem}
+  .hero-title{font-size:32px}
+  .hero-desc{font-size:14px;margin-bottom:1.5rem}
+  .hero-feature{display:none}
+
+  /* ── Posts grid ── */
+  .posts-layout{grid-template-columns:1fr!important}
+  .post-card.featured{grid-column:1!important}
+  .post-card.featured .post-title{font-size:22px!important}
+  .post-card{border-right:none!important;border-bottom:1px solid var(--paper-3)}
+
+  /* ── Section headers & blog ── */
+  .section-header{padding:1.25rem 1rem}
+  .blog-controls{padding:1rem;gap:8px;flex-wrap:wrap}
+  .blog-search{width:100%;margin-left:0;margin-top:4px}
+  .blog-list{padding:0 1rem 1.5rem}
+  .blog-item{gap:.625rem}
+
+  /* ── Single post ── */
+  .post-full-header{padding:2rem 1rem 1.5rem}
+  .post-full-title{font-size:28px}
+  .post-full-excerpt{font-size:15px}
+  .post-body{padding:1.5rem 1rem;font-size:15px}
+  .post-body blockquote{font-size:17px}
+
+  /* ── About ── */
+  .about-hero{grid-template-columns:1fr;padding:2.5rem 1rem}
+  .about-title{font-size:36px}
+  .stats-strip{grid-template-columns:1fr 1fr}
+  .stat-cell{padding:1.25rem}
+  .team-grid{grid-template-columns:1fr 1fr}
+  .team-card:nth-child(3n){border-right:1px solid var(--paper-3)}
+  .team-card:nth-child(even){border-right:none}
+
+  /* ── Admin tables: scrollable ── */
+  .posts-table-wrap{overflow-x:auto}
+  .data-table-wrap{overflow-x:auto}
+  .posts-table-wrap table,.data-table-wrap table{min-width:520px}
+
+  /* ── Editor modal ── */
+  #editor-modal{padding:.5rem;align-items:flex-start}
+  .editor-modal-box{grid-template-columns:1fr;min-height:auto;max-height:100dvh;overflow-y:auto}
+  .editor-inner{grid-template-columns:1fr}
+  .editor-preview-pane{display:none!important}
+
+  /* ── New post panel ── */
+  .new-post-layout{grid-template-columns:1fr}
+  .np-preview-pane{display:none}
+
+  /* ── Login box ── */
+  .login-box{width:96vw;padding:1.5rem}
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — 480 px (small phone)
+═══════════════════════════════════════ */
+@media(max-width:480px){
+  .hero-title{font-size:26px}
+  .analytics-grid{grid-template-columns:1fr!important}
+  .team-grid{grid-template-columns:1fr}
+  .stats-strip{grid-template-columns:1fr 1fr}
+  .post-full-title{font-size:22px}
+  .admin-page-title{font-size:20px}
+  .about-title{font-size:28px}
+  .section-title{font-size:20px}
+  .analytics-num{font-size:26px}
+}
+
+/* ── CONTACT VIEW ── */
+.contact-hero{background:var(--ink);color:var(--paper);padding:4rem 2rem 3.5rem;text-align:center}
+.contact-hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+.contact-hero-title{font-family:var(--serif);font-size:52px;font-weight:700;letter-spacing:-1.5px;line-height:1.05;margin-bottom:1rem}
+.contact-hero-title em{color:var(--accent);font-style:italic}
+.contact-hero-desc{font-size:16px;line-height:1.8;color:#b5b0a6;max-width:560px;margin:0 auto}
+.contact-body{display:grid;grid-template-columns:1fr 360px;gap:0;max-width:1100px;margin:0 auto;padding:3rem 2rem}
+.contact-form-section{padding-right:3rem;border-right:1px solid var(--paper-3)}
+.contact-form-title{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:.5rem}
+.contact-form-sub{font-size:13px;color:var(--ink-3);margin-bottom:2rem}
+.contact-field{margin-bottom:1.25rem}
+.contact-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-bottom:6px;display:block}
+.contact-input{width:100%;background:var(--paper);border:1.5px solid var(--paper-3);border-radius:var(--radius);padding:11px 14px;font-family:var(--sans);font-size:14px;color:var(--ink);outline:none;transition:border-color var(--trans)}
+.contact-input:focus{border-color:var(--accent)}
+.contact-input::placeholder{color:var(--ink-3)}
+.contact-textarea{resize:vertical;min-height:160px;line-height:1.7}
+.contact-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.contact-submit{width:100%;background:var(--accent);border:none;border-radius:var(--radius);padding:13px;color:#fff;font-family:var(--sans);font-size:15px;font-weight:500;cursor:pointer;transition:background var(--trans);margin-top:.5rem}
+.contact-submit:hover{background:var(--accent-2)}
+.contact-submit:disabled{opacity:.6;cursor:not-allowed}
+.contact-msg{font-size:13px;font-weight:500;min-height:18px;margin-top:10px}
+.contact-msg.success{color:var(--green)}
+.contact-msg.error{color:#c0392b}
+.contact-info-section{padding-left:3rem}
+.contact-info-title{font-family:var(--serif);font-size:20px;font-weight:700;letter-spacing:-.3px;margin-bottom:1.5rem}
+.contact-info-item{display:flex;align-items:flex-start;gap:14px;padding:1.25rem 0;border-bottom:1px solid var(--paper-3)}
+.contact-info-item:last-child{border-bottom:none}
+.contact-info-icon{width:42px;height:42px;border-radius:50%;background:var(--accent-pale);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.contact-info-label{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.contact-info-value{font-size:14px;color:var(--ink-2);font-weight:500;word-break:break-all}
+.contact-info-note{font-size:12px;color:var(--ink-3);margin-top:2px}
+
+/* ── FOOTER ── */
+#site-footer{background:var(--ink);color:var(--paper);border-top:3px solid var(--accent);padding:3rem 2rem 0}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr;gap:2.5rem;margin-bottom:2.5rem}
+.footer-brand-col{}
+.footer-brand{font-family:var(--serif);font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:.625rem}
+.footer-brand span{color:var(--accent)}
+.footer-tagline{font-size:13px;color:#b5b0a6;line-height:1.7;margin-bottom:1.5rem;max-width:260px}
+.footer-social{display:flex;gap:10px}
+.footer-social-link{width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:14px;cursor:pointer;transition:all var(--trans);text-decoration:none}
+.footer-social-link:hover{border-color:var(--accent);color:var(--accent)}
+.footer-col-title{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:1.25rem}
+.footer-nav-link{display:block;background:none;border:none;font-family:var(--sans);font-size:13px;color:#b5b0a6;padding:5px 0;cursor:pointer;transition:color var(--trans);text-align:left}
+.footer-nav-link:hover{color:#fff}
+.footer-info-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;font-size:13px;color:#b5b0a6;line-height:1.5}
+.footer-info-icon{color:var(--accent);flex-shrink:0;margin-top:1px}
+.footer-newsletter-desc{font-size:13px;color:#b5b0a6;line-height:1.7;margin-bottom:1.25rem}
+.footer-sub-btn{width:100%;background:var(--accent);border:none;border-radius:var(--radius);padding:11px 18px;color:#fff;font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;transition:background var(--trans)}
+.footer-sub-btn:hover{background:var(--accent-2)}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding:1.25rem 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.footer-copy{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.04em}
+.footer-admin-link{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.18);letter-spacing:.06em;background:none;border:none;cursor:pointer;transition:color var(--trans)}
+.footer-admin-link:hover{color:rgba(255,255,255,.5)}
+
+/* ── ADMIN MESSAGES PANEL ── */
+.msg-row{cursor:default}
+.msg-row.unread td{color:var(--admin-text)}
+.msg-row.unread td:first-child{font-weight:600}
+.msg-unread-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--admin-accent);margin-right:8px;vertical-align:middle}
+
+/* ── MESSAGE VIEW MODAL ── */
+#msg-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;display:flex;align-items:center;justify-content:center;padding:1.5rem;backdrop-filter:blur(4px)}
+.msg-modal-box{background:var(--admin-panel);border:1px solid var(--admin-border);border-radius:12px;width:100%;max-width:600px;overflow:hidden;animation:fadein .25s ease}
+.msg-modal-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid var(--admin-border);background:var(--admin-bg)}
+.msg-modal-title{font-size:14px;font-weight:500;color:var(--admin-text);display:flex;align-items:center;gap:10px}
+.msg-modal-title .msg-unread-dot{margin:0}
+.msg-modal-close{background:transparent;border:1.5px solid var(--admin-border);border-radius:var(--radius);color:var(--admin-muted);font-size:13px;padding:5px 12px;cursor:pointer;transition:all var(--trans)}
+.msg-modal-close:hover{border-color:var(--admin-muted);color:var(--admin-text)}
+.msg-modal-meta{padding:1.25rem 1.5rem;border-bottom:1px solid var(--admin-border);display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.msg-meta-item{}
+.msg-meta-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--admin-muted);margin-bottom:4px}
+.msg-meta-value{font-size:13px;color:var(--admin-text);word-break:break-all}
+.msg-modal-body{padding:1.5rem}
+.msg-body-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--admin-muted);margin-bottom:.75rem}
+.msg-body-text{font-size:14px;color:var(--admin-text);line-height:1.8;white-space:pre-wrap;background:rgba(255,255,255,.03);border:1px solid var(--admin-border);border-radius:var(--radius);padding:1rem 1.25rem;min-height:100px}
+.msg-modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--admin-border);display:flex;justify-content:flex-end;gap:10px}
+
+@media(max-width:900px){
+  .contact-body{grid-template-columns:1fr;padding:2rem 1.5rem}
+  .contact-form-section{padding-right:0;border-right:none;border-bottom:1px solid var(--paper-3);padding-bottom:2.5rem;margin-bottom:2.5rem}
+  .contact-info-section{padding-left:0}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .footer-brand-col{grid-column:span 2}
+}
+@media(max-width:700px){
+  .contact-hero{padding:3rem 1rem 2.5rem}
+  .contact-hero-title{font-size:36px}
+  .contact-body{padding:1.5rem 1rem}
+  .contact-row{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;gap:2rem}
+  .footer-brand-col{grid-column:auto}
+  #site-footer{padding:2.5rem 1rem 0}
+  .footer-bottom{flex-direction:column;align-items:flex-start;gap:8px}
+}
+@media(max-width:480px){
+  .contact-hero-title{font-size:28px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     PUBLIC SITE
+══════════════════════════════════════════ -->
+<div id="public-site">
+  <nav>
+    <div class="nav-brand">Gracy<span>Blog</span></div>
+    <div class="nav-links">
+      <button class="active" onclick="showView('home',this)">Home</button>
+      <button onclick="showView('blog',this)">Articles</button>
+      <button onclick="showView('about',this)">About</button>
+      <button onclick="showView('contact',this)">Contact</button>
+    </div>
+    <button class="nav-burger" onclick="toggleNav()" aria-label="Menu">☰</button>
+    <div class="nav-actions">
+      <button class="btn btn-ghost" onclick="openSubscribeModal()">Subscribe</button>
+      <button class="admin-login-btn" onclick="openLogin()">⚙ Admin</button>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <div class="view active" id="view-home">
+    <div class="hero">
+      <div>
+        <div class="hero-eyebrow">// Pharmacist · Writer · Papua New Guinea</div>
+        <h1 class="hero-title">Ideas worth <em>reading,</em><br>stories worth telling.</h1>
+        <p class="hero-desc">A personal blog by Grace Apenda — Paediatric Pharmacist, writer, and advocate for health and community in Papua New Guinea.</p>
+        <div class="hero-cta">
+          <button class="btn btn-solid" onclick="showView('blog',document.querySelector('.nav-links button:nth-child(2)'))">Browse Articles →</button>
+          <button class="btn btn-ghost" style="color:#b5b0a6;border-color:#444" onclick="openSubscribeModal()">Subscribe</button>
+        </div>
+      </div>
+      <div class="hero-feature">
+        <div class="feat-cell"><div class="feat-icon">✦</div><div class="feat-label">Editorial Voice</div><div class="feat-desc">Thoughtful long-form writing</div></div>
+        <div class="feat-cell"><div class="feat-icon">◈</div><div class="feat-label">Tag System</div><div class="feat-desc">Category & filter navigation</div></div>
+        <div class="feat-cell"><div class="feat-icon">⊕</div><div class="feat-label">Author Profiles</div><div class="feat-desc">Multi-author support</div></div>
+        <div class="feat-cell"><div class="feat-icon">◎</div><div class="feat-label">RSS & Search</div><div class="feat-desc">Feed subscriptions</div></div>
+      </div>
+    </div>
+    <div class="section-header">
+      <div class="section-title">Latest Articles</div>
+      <div class="section-link" onclick="showView('blog',document.querySelector('.nav-links button:nth-child(2)'))">View all →</div>
+    </div>
+    <div id="home-posts-top"></div>
+    <div id="home-posts-bottom"></div>
+  </div>
+
+  <!-- BLOG LIST -->
+  <div class="view" id="view-blog">
+    <div class="section-header">
+      <div class="section-title">All Articles</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--ink-3)" id="post-count"></div>
+    </div>
+    <div class="blog-controls">
+      <button class="filter-btn active" onclick="filterPosts('all',this)">All</button>
+      <button class="filter-btn" onclick="filterPosts('Technology',this)">Technology</button>
+      <button class="filter-btn" onclick="filterPosts('Design',this)">Design</button>
+      <button class="filter-btn" onclick="filterPosts('Culture',this)">Culture</button>
+      <button class="filter-btn" onclick="filterPosts('Opinion',this)">Opinion</button>
+      <input class="blog-search" type="text" placeholder="Search articles…" oninput="searchPosts(this.value)"/>
+    </div>
+    <div class="blog-list" id="blog-list"></div>
+  </div>
+
+  <!-- SINGLE POST -->
+  <div class="view" id="view-post">
+    <div class="post-back" onclick="goBack()">← Back to articles</div>
+    <div id="post-header-full"></div>
+    <div class="post-body" id="post-body-full"></div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="view" id="view-about">
+    <div class="about-hero">
+      <div><h1 class="about-title">Words that <em>matter.</em></h1></div>
+      <div>
+        <p class="about-desc">GracyBlog is the personal blog of Grace Apenda — a Paediatric Pharmacist based in Port Moresby, Papua New Guinea.</p>
+        <br/><p class="about-desc">Writing about medicine, health, culture, and everyday life. Sharing stories and knowledge from the frontlines of paediatric healthcare.</p>
+      </div>
+    </div>
+    <div class="stats-strip">
+      <div class="stat-cell"><div class="stat-num" id="about-posts-count">—</div><div class="stat-label">Articles published</div></div>
+      <div class="stat-cell"><div class="stat-num">14k</div><div class="stat-label">Monthly readers</div></div>
+      <div class="stat-cell"><div class="stat-num">1</div><div class="stat-label">Author</div></div>
+      <div class="stat-cell"><div class="stat-num">2</div><div class="stat-label">Years running</div></div>
+    </div>
+    <div class="section-header" style="border-top:1px solid var(--paper-3)"><div class="section-title">About the Author</div></div>
+    <div class="team-grid" id="team-grid"></div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="view" id="view-contact">
+    <div class="contact-hero">
+      <div class="contact-hero-eyebrow">// Get in touch</div>
+      <h1 class="contact-hero-title">Let's start a <em>conversation.</em></h1>
+      <p class="contact-hero-desc">Have a question, a story idea, or just want to say hello? I'd love to hear from you.</p>
+    </div>
+    <div class="contact-body">
+      <div class="contact-form-section">
+        <div class="contact-form-title">Send a Message</div>
+        <p class="contact-form-sub">Fill in the form below and I'll get back to you as soon as possible.</p>
+        <form id="contact-form" onsubmit="handleContactForm(event)">
+          <div class="contact-row">
+            <div class="contact-field">
+              <label class="contact-label" for="cf-name">Your Name</label>
+              <input class="contact-input" id="cf-name" type="text" placeholder="Grace Apenda" required autocomplete="name"/>
+            </div>
+            <div class="contact-field">
+              <label class="contact-label" for="cf-email">Email Address</label>
+              <input class="contact-input" id="cf-email" type="email" placeholder="you@example.com" required autocomplete="email"/>
+            </div>
+          </div>
+          <div class="contact-field">
+            <label class="contact-label" for="cf-subject">Subject</label>
+            <input class="contact-input" id="cf-subject" type="text" placeholder="What's this about?" required/>
+          </div>
+          <div class="contact-field">
+            <label class="contact-label" for="cf-message">Message</label>
+            <textarea class="contact-input contact-textarea" id="cf-message" placeholder="Your message here…" required></textarea>
+          </div>
+          <button class="contact-submit" id="cf-btn" type="submit">Send Message →</button>
+          <div class="contact-msg" id="cf-msg"></div>
+        </form>
+      </div>
+      <div class="contact-info-section">
+        <div class="contact-info-title">Contact Information</div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">✉</div>
+          <div>
+            <div class="contact-info-label">Email</div>
+            <div class="contact-info-value">graceapenda56@gmail.com</div>
+            <div class="contact-info-note">I reply within 1–2 business days</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">◎</div>
+          <div>
+            <div class="contact-info-label">Location</div>
+            <div class="contact-info-value">Port Moresby, Papua New Guinea</div>
+            <div class="contact-info-note">GMT+10 · Pacific/Port_Moresby</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">✦</div>
+          <div>
+            <div class="contact-info-label">Profession</div>
+            <div class="contact-info-value">Paediatric Pharmacist</div>
+            <div class="contact-info-note">Port Moresby General Hospital</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon">◈</div>
+          <div>
+            <div class="contact-info-label">Newsletter</div>
+            <div class="contact-info-value" style="cursor:pointer;color:var(--accent)" onclick="openSubscribeModal()">Subscribe to GracyBlog →</div>
+            <div class="contact-info-note">New articles delivered to your inbox</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <div class="footer-brand">Graci<span>Blog</span></div>
+        <p class="footer-tagline">A personal blog by Grace Apenda — Paediatric Pharmacist and writer from Port Moresby, Papua New Guinea.</p>
+        <div class="footer-social">
+          <a class="footer-social-link" href="mailto:graceapenda56@gmail.com" title="Email" aria-label="Email">✉</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigate</div>
+        <button class="footer-nav-link" onclick="showView('home',document.querySelector('.nav-links button:nth-child(1)'))">Home</button>
+        <button class="footer-nav-link" onclick="showView('blog',document.querySelector('.nav-links button:nth-child(2)'))">Articles</button>
+        <button class="footer-nav-link" onclick="showView('about',document.querySelector('.nav-links button:nth-child(3)'))">About</button>
+        <button class="footer-nav-link" onclick="showView('contact',document.querySelector('.nav-links button:nth-child(4)'))">Contact</button>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <div class="footer-info-item"><span class="footer-info-icon">✉</span><span>graceapenda56@gmail.com</span></div>
+        <div class="footer-info-item"><span class="footer-info-icon">◎</span><span>Port Moresby, Papua New Guinea</span></div>
+        <div class="footer-info-item"><span class="footer-info-icon">✦</span><span>Paediatric Pharmacist</span></div>
+      </div>
+      <div>
+        <div class="footer-col-title">Newsletter</div>
+        <p class="footer-newsletter-desc">Get new articles from GracyBlog delivered straight to your inbox. No spam, ever.</p>
+        <button class="footer-sub-btn" onclick="openSubscribeModal()">Subscribe →</button>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© <span id="footer-year"></span> GracyBlog · Grace Apenda · All rights reserved</span>
+      <button class="footer-admin-link" onclick="openLogin()">⚙ Admin</button>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════
+     LOGIN MODAL
+══════════════════════════════════════════ -->
+<div id="login-overlay" class="hidden">
+  <div class="login-box">
+    <div class="login-brand">Graci<span>Blog</span></div>
+    <div class="login-sub">// Admin Access Portal</div>
+    <div class="login-label">Email</div>
+    <input class="login-input" id="login-email" type="email" placeholder="admin@example.com" autocomplete="username"/>
+    <div class="login-label">Password</div>
+    <input class="login-input" id="login-pass" type="password" placeholder="••••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <div class="login-error" id="login-error">Invalid email or password. Please try again.</div>
+    <div class="login-btns">
+      <button class="btn-cancel" onclick="closeLogin()">Cancel</button>
+      <button class="btn-login" id="login-btn" onclick="doLogin()">Sign In →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SUBSCRIBE MODAL
+══════════════════════════════════════════ -->
+<div id="subscribe-overlay" class="hidden" onclick="if(event.target===this)closeSubscribeModal()">
+  <div class="subscribe-box">
+    <div class="subscribe-top">
+      <div class="subscribe-eyebrow">// Newsletter</div>
+      <div class="subscribe-title">Stories worth <em>reading,</em><br>delivered to you.</div>
+      <p class="subscribe-desc">New articles from GracyBlog arrive in your inbox — thoughtful writing on medicine, culture, and life. No noise, just good reading.</p>
+    </div>
+    <div class="subscribe-embed">
+      <form class="subscribe-form" id="subscribe-form" onsubmit="handleSubscribeForm(event)">
+        <div class="sub-field-wrap">
+          <input
+            class="sub-email-input"
+            id="sub-email"
+            type="email"
+            placeholder="your@email.com"
+            required
+            autocomplete="email"
+          />
+          <button class="sub-submit-btn" id="sub-btn" type="submit">Subscribe →</button>
+        </div>
+        <div class="sub-note">No spam · Unsubscribe any time</div>
+        <div class="sub-msg" id="sub-msg"></div>
+      </form>
+    </div>
+    <div class="subscribe-foot">
+      <span class="subscribe-brand">GracyBlog Newsletter</span>
+      <button class="subscribe-close-btn" onclick="closeSubscribeModal()">✕ Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     ADMIN SITE
+══════════════════════════════════════════ -->
+<div id="admin-site">
+  <div class="admin-topbar">
+    <div class="admin-topbar-brand">Graci<span>Blog</span> <span style="font-family:var(--mono);font-size:11px;color:var(--admin-muted);font-weight:400;margin-left:8px">/ Admin</span></div>
+    <div class="admin-topbar-right">
+      <span class="admin-user" id="admin-user-email">—</span>
+      <button class="btn btn-ghost" style="font-size:12px;border-color:var(--admin-border);color:var(--admin-muted)" onclick="exitAdmin()">← Exit to Site</button>
+    </div>
+  </div>
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-section">Overview</div>
+      <button class="sidebar-btn active" onclick="showAdminPanel('dashboard',this)"><span class="sidebar-icon">◈</span> Dashboard</button>
+      <button class="sidebar-btn" onclick="showAdminPanel('analytics',this)"><span class="sidebar-icon">▦</span> Analytics</button>
+      <div class="sidebar-section">Content</div>
+      <button class="sidebar-btn" onclick="showAdminPanel('posts',this)"><span class="sidebar-icon">✦</span> Blog Posts</button>
+      <button class="sidebar-btn" onclick="showAdminPanel('new-post',this)"><span class="sidebar-icon">⊕</span> New Post</button>
+      <div class="sidebar-section">Audience</div>
+      <button class="sidebar-btn" onclick="showAdminPanel('subscribers',this)"><span class="sidebar-icon">◎</span> Subscribers</button>
+      <button class="sidebar-btn" onclick="showAdminPanel('donors',this)"><span class="sidebar-icon">♦</span> Donors</button>
+      <button class="sidebar-btn" onclick="showAdminPanel('visitors',this)"><span class="sidebar-icon">⊙</span> Visitors</button>
+      <button class="sidebar-btn" onclick="showAdminPanel('messages',this)"><span class="sidebar-icon">✉</span> Messages</button>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="admin-main">
+
+      <!-- DASHBOARD -->
+      <div class="admin-panel active" id="panel-dashboard">
+        <div class="admin-page-title">Dashboard</div>
+        <div class="admin-page-sub">Welcome back, Admin · <span id="dash-date"></span></div>
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <div class="analytics-card-top">
+              <div class="analytics-label">Total Posts</div>
+              <div class="analytics-icon" style="background:rgba(79,142,247,.15);color:var(--admin-accent)">✦</div>
+            </div>
+            <div class="analytics-num" id="dash-posts">—</div>
+            <div class="analytics-change up">↑ Published articles</div>
+          </div>
+          <div class="analytics-card">
+            <div class="analytics-card-top">
+              <div class="analytics-label">Subscribers</div>
+              <div class="analytics-icon" style="background:rgba(76,175,135,.15);color:#4caf87">◎</div>
+            </div>
+            <div class="analytics-num" id="dash-subs">—</div>
+            <div class="analytics-change up">↑ Active subscribers</div>
+          </div>
+          <div class="analytics-card">
+            <div class="analytics-card-top">
+              <div class="analytics-label">Monthly Visitors</div>
+              <div class="analytics-icon" style="background:rgba(200,148,10,.15);color:#c8940a">⊙</div>
+            </div>
+            <div class="analytics-num">14.2k</div>
+            <div class="analytics-change up">↑ 8.3% vs last mo.</div>
+          </div>
+          <div class="analytics-card">
+            <div class="analytics-card-top">
+              <div class="analytics-label">Donations</div>
+              <div class="analytics-icon" style="background:rgba(192,74,26,.15);color:var(--accent)">♦</div>
+            </div>
+            <div class="analytics-num" id="dash-donations">—</div>
+            <div class="analytics-change up">↑ Total raised</div>
+          </div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-card">
+            <div class="chart-title">Visitor Traffic — Last 7 Days</div>
+            <div class="mini-bar-chart" id="traffic-chart"></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Traffic Sources</div>
+            <div class="donut-wrap">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#2a2f3d" stroke-width="18"/>
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#4f8ef7" stroke-width="18" stroke-dasharray="95 144" stroke-dashoffset="-20" transform="rotate(-90 50 50)"/>
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#4caf87" stroke-width="18" stroke-dasharray="55 184" stroke-dashoffset="-115" transform="rotate(-90 50 50)"/>
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#c8940a" stroke-width="18" stroke-dasharray="30 209" stroke-dashoffset="-170" transform="rotate(-90 50 50)"/>
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#c04a1a" stroke-width="18" stroke-dasharray="20 220" stroke-dashoffset="-200" transform="rotate(-90 50 50)"/>
+              </svg>
+              <div class="donut-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#4f8ef7"></div>Organic Search — 40%</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#4caf87"></div>Direct — 23%</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#c8940a"></div>Social — 13%</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#c04a1a"></div>Referral — 8%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="activity-list">
+          <div class="chart-title" style="margin-bottom:1rem">Recent Activity</div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:#4caf87"></div>
+            <div class="activity-text"><strong>New subscriber</strong> — contact@example.com joined the newsletter</div>
+            <div class="activity-time">2 min ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:#4f8ef7"></div>
+            <div class="activity-text"><strong>Post viewed</strong> — "The Architecture of Clarity" reached 500 views</div>
+            <div class="activity-time">18 min ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:#c8940a"></div>
+            <div class="activity-text"><strong>Donation received</strong> — Anonymous donated <strong>$25</strong></div>
+            <div class="activity-time">1 hr ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:#c04a1a"></div>
+            <div class="activity-text"><strong>New visitor spike</strong> — 340 concurrent readers on "In Defense of Boring Technology"</div>
+            <div class="activity-time">3 hr ago</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-dot" style="background:#4caf87"></div>
+            <div class="activity-text"><strong>New subscriber</strong> — dev@webstudio.io joined the newsletter</div>
+            <div class="activity-time">5 hr ago</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="admin-panel" id="panel-analytics">
+        <div class="admin-page-title">Analytics</div>
+        <div class="admin-page-sub">Detailed audience & content performance</div>
+        <div class="analytics-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="analytics-card">
+            <div class="analytics-card-top"><div class="analytics-label">Avg. Session Duration</div><div class="analytics-icon" style="background:rgba(79,142,247,.12);color:#4f8ef7">◷</div></div>
+            <div class="analytics-num">4:32</div><div class="analytics-change up">↑ 0:18 vs prev. month</div>
+          </div>
+          <div class="analytics-card">
+            <div class="analytics-card-top"><div class="analytics-label">Bounce Rate</div><div class="analytics-icon" style="background:rgba(224,82,82,.12);color:#e05252">↩</div></div>
+            <div class="analytics-num">38%</div><div class="analytics-change up">↓ 3% improved</div>
+          </div>
+          <div class="analytics-card">
+            <div class="analytics-card-top"><div class="analytics-label">Pages / Session</div><div class="analytics-icon" style="background:rgba(76,175,135,.12);color:#4caf87">⊞</div></div>
+            <div class="analytics-num">2.7</div><div class="analytics-change up">↑ 0.4 this month</div>
+          </div>
+        </div>
+
+        <div class="chart-card" style="margin-bottom:16px">
+          <div class="chart-title">Subscriber Growth — 2026</div>
+          <div class="mini-bar-chart" id="subscriber-chart" style="height:140px"></div>
+        </div>
+
+        <div class="chart-row">
+          <div class="chart-card">
+            <div class="chart-title">Top Posts by Views</div>
+            <table style="margin-top:4px">
+              <tr><th>#</th><th>Title</th><th>Views</th><th>Time</th></tr>
+              <tr><td>1</td><td>The Architecture of Clarity</td><td style="color:#4caf87">4,821</td><td>8 min</td></tr>
+              <tr><td>2</td><td>In Defense of Boring Technology</td><td style="color:#4caf87">3,205</td><td>4 min</td></tr>
+              <tr><td>3</td><td>Color Theory for Developers</td><td style="color:#4caf87">2,890</td><td>6 min</td></tr>
+              <tr><td>4</td><td>Variable Fonts &amp; Why They Matter</td><td style="color:#4caf87">1,744</td><td>7 min</td></tr>
+              <tr><td>5</td><td>Remote Work Two Years In</td><td style="color:#4caf87">1,320</td><td>5 min</td></tr>
+            </table>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Readers by Country</div>
+            <table style="margin-top:4px">
+              <tr><th>Country</th><th>%</th></tr>
+              <tr><td>🇺🇸 Papua New Guinea</td><td>34%</td></tr>
+              <tr><td>🇬🇧 United Kingdom</td><td>18%</td></tr>
+              <tr><td>🇩🇪 Germany</td><td>11%</td></tr>
+              <tr><td>🇨🇦 Canada</td><td>9%</td></tr>
+              <tr><td>🇦🇺 Australia</td><td>7%</td></tr>
+              <tr><td>🌍 Other</td><td>21%</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- POSTS MANAGER -->
+      <div class="admin-panel" id="panel-posts">
+        <div class="admin-page-title">Blog Posts</div>
+        <div class="admin-page-sub">Manage, edit, and delete published articles</div>
+        <div class="posts-table-wrap">
+          <div class="posts-table-toolbar">
+            <h3 id="posts-table-count">— posts</h3>
+            <button class="btn btn-admin" onclick="showAdminPanel('new-post',document.querySelector('.sidebar-btn:nth-child(5)'))">+ New Post</button>
+          </div>
+          <table id="posts-table"></table>
+        </div>
+      </div>
+
+      <!-- NEW POST -->
+      <div class="admin-panel" id="panel-new-post">
+        <div class="admin-page-title">New Post</div>
+        <div class="admin-page-sub">Write and publish a new article</div>
+        <div class="new-post-layout">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="em-toolbar">
+              <button class="em-tool" onclick="npInsert('**','**')">B</button>
+              <button class="em-tool" onclick="npInsert('*','*')"><em>I</em></button>
+              <button class="em-tool" onclick="npInsert('\n## ','')">H2</button>
+              <button class="em-tool" onclick="npInsert('\n> ','')">❝</button>
+              <button class="em-tool" onclick="npInsert('\n```\n','\n```')">Code</button>
+            </div>
+            <div><div class="em-label">Title</div><input class="em-input em-title-input" id="np-title" placeholder="Post headline…" oninput="npPreview()"/></div>
+            <div><div class="em-label">Excerpt</div><textarea class="em-textarea" id="np-excerpt" rows="2" placeholder="One-line summary…" oninput="npPreview()"></textarea></div>
+            <div><div class="em-label">Body (Markdown)</div><textarea class="em-textarea em-body" id="np-body" rows="14" placeholder="Start writing…" oninput="npPreview()"></textarea></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div><div class="em-label">Category</div><select class="em-select" id="np-tag"><option>Technology</option><option>Design</option><option>Culture</option><option>Opinion</option></select></div>
+              <div><div class="em-label">Author</div><select class="em-select" id="np-author"></select></div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:4px">
+              <button class="btn btn-admin" style="flex:1" onclick="publishNewPost()">Publish Post →</button>
+              <button class="btn" style="border-color:var(--admin-border);color:var(--admin-muted);background:transparent" onclick="saveDraft()">Save Draft</button>
+            </div>
+          </div>
+          <div class="np-preview-pane" style="background:var(--paper-2);border-radius:10px;padding:1.5rem;overflow-y:auto">
+            <div class="preview-label">Live Preview</div>
+            <div id="np-preview"><span style="font-size:13px;color:var(--ink-3);font-style:italic">Start writing to preview…</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBSCRIBERS -->
+      <div class="admin-panel" id="panel-subscribers">
+        <div class="admin-page-title">Subscribers</div>
+        <div class="admin-page-sub">Newsletter subscriber management</div>
+        <div class="analytics-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:1.5rem">
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">Active</div><div class="analytics-num" id="subs-total">—</div><div class="analytics-change up">Active subscribers</div></div>
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">Open Rate</div><div class="analytics-num">42%</div><div class="analytics-change up">Industry avg: 21%</div></div>
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">Unsubscribed</div><div class="analytics-num" id="subs-unsubbed">—</div><div class="analytics-change down">Total unsubscribed</div></div>
+        </div>
+        <div class="data-table-wrap">
+          <div class="posts-table-toolbar"><h3>Recent Subscribers</h3></div>
+          <table>
+            <thead><tr><th>Email</th><th>Joined</th><th>Source</th><th>Status</th></tr></thead>
+            <tbody id="subscribers-list"><tr><td colspan="4" style="text-align:center;color:var(--admin-muted);padding:2rem">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DONORS -->
+      <div class="admin-panel" id="panel-donors">
+        <div class="admin-page-title">Donors</div>
+        <div class="admin-page-sub">People who have supported GracyBlog</div>
+        <div class="analytics-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.5rem">
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">Total Raised</div><div class="analytics-num" id="donors-total">—</div><div class="analytics-change up">All time</div></div>
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">Donors</div><div class="analytics-num" id="donors-count">—</div><div class="analytics-change up">Total donors</div></div>
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">Avg. Donation</div><div class="analytics-num" id="donors-avg">—</div><div class="analytics-change up">Per donation</div></div>
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">Recurring</div><div class="analytics-num" id="donors-recurring">—</div><div class="analytics-change up">Monthly supporters</div></div>
+        </div>
+        <div class="data-table-wrap">
+          <div class="posts-table-toolbar"><h3>Recent Donations</h3></div>
+          <table>
+            <thead><tr><th>Donor</th><th>Amount</th><th>Date</th><th>Type</th><th>Message</th></tr></thead>
+            <tbody id="donors-list"><tr><td colspan="5" style="text-align:center;color:var(--admin-muted);padding:2rem">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- VISITORS -->
+      <div class="admin-panel" id="panel-visitors">
+        <div class="admin-page-title">Visitors</div>
+        <div class="admin-page-sub">Real-time and historical visitor data</div>
+        <div class="analytics-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.5rem">
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">Live Now</div><div class="analytics-num" id="live-visitors">47</div><div class="analytics-change up">↑ Active readers</div></div>
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">Today</div><div class="analytics-num">1,204</div><div class="analytics-change up">↑ 12% vs yesterday</div></div>
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">This Month</div><div class="analytics-num">14.2k</div><div class="analytics-change up">↑ 8.3% growth</div></div>
+          <div class="analytics-card"><div class="analytics-label" style="margin-bottom:8px">All Time</div><div class="analytics-num">284k</div><div class="analytics-change up">Since 2024</div></div>
+        </div>
+        <div class="chart-card" style="margin-bottom:16px">
+          <div class="chart-title">Monthly Visitors — 2026</div>
+          <div class="mini-bar-chart" id="visitors-chart" style="height:140px"></div>
+        </div>
+        <div class="data-table-wrap">
+          <div class="posts-table-toolbar"><h3>Current Active Sessions</h3></div>
+          <table>
+            <tr><th>Page</th><th>Country</th><th>Device</th><th>Duration</th><th>Source</th></tr>
+            <tr><td>The Architecture of Clarity</td><td>🇺🇸 US</td><td>Desktop</td><td>3:24</td><td>Google</td></tr>
+            <tr><td>Homepage</td><td>🇬🇧 UK</td><td>Mobile</td><td>0:47</td><td>Direct</td></tr>
+            <tr><td>Boring Technology</td><td>🇩🇪 DE</td><td>Desktop</td><td>5:12</td><td>HN</td></tr>
+            <tr><td>Color Theory</td><td>🇨🇦 CA</td><td>Tablet</td><td>2:08</td><td>Twitter</td></tr>
+            <tr><td>Articles</td><td>🇦🇺 AU</td><td>Mobile</td><td>1:33</td><td>Newsletter</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- MESSAGES -->
+      <div class="admin-panel" id="panel-messages">
+        <div class="admin-page-title">Messages</div>
+        <div class="admin-page-sub">Contact form submissions from your readers</div>
+        <div class="data-table-wrap">
+          <div class="posts-table-toolbar">
+            <h3>Inbox</h3>
+            <span id="messages-count" style="font-family:var(--mono);font-size:11px;color:var(--admin-muted)"></span>
+          </div>
+          <table>
+            <tr><th></th><th>Name</th><th>Email</th><th>Subject</th><th>Date</th><th>Actions</th></tr>
+            <tbody id="messages-table"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- EDITOR MODAL -->
+<div id="editor-modal" class="hidden">
+  <div class="editor-modal-box">
+    <div class="editor-modal-header" style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid var(--admin-border);grid-column:unset;background:var(--admin-bg)">
+      <div class="editor-modal-title">Edit Post</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-admin" onclick="saveEdit()">Save Changes</button>
+        <button class="btn" style="border-color:var(--admin-border);color:var(--admin-muted);background:transparent;font-size:12px;padding:6px 12px" onclick="closeEditor()">Cancel</button>
+      </div>
+    </div>
+    <div class="editor-inner">
+      <div style="padding:1.5rem;border-right:1px solid var(--admin-border);display:flex;flex-direction:column;gap:12px;overflow-y:auto">
+        <div class="em-toolbar">
+          <button class="em-tool" onclick="edInsert('**','**')">B</button>
+          <button class="em-tool" onclick="edInsert('*','*')"><em>I</em></button>
+          <button class="em-tool" onclick="edInsert('\n## ','')">H2</button>
+          <button class="em-tool" onclick="edInsert('\n> ','')">❝</button>
+          <button class="em-tool" onclick="edInsert('\n```\n','\n```')">Code</button>
+        </div>
+        <div><div class="em-label">Title</div><input class="em-input em-title-input" id="ed-title" oninput="edPreview()"/></div>
+        <div><div class="em-label">Excerpt</div><textarea class="em-textarea" id="ed-excerpt" rows="2" oninput="edPreview()"></textarea></div>
+        <div><div class="em-label">Body</div><textarea class="em-textarea em-body" id="ed-body" rows="14" oninput="edPreview()"></textarea></div>
+        <div class="em-row">
+          <div><div class="em-label">Category</div><select class="em-select" id="ed-tag"><option>Technology</option><option>Design</option><option>Culture</option><option>Opinion</option></select></div>
+          <div><div class="em-label">Author</div><select class="em-select" id="ed-author"></select></div>
+        </div>
+      </div>
+      <div class="editor-preview-pane" style="padding:1.5rem;background:var(--paper-2);overflow-y:auto">
+        <div class="preview-label">Live Preview</div>
+        <div id="ed-preview"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MESSAGE VIEW MODAL -->
+<div id="msg-modal" class="hidden" onclick="if(event.target===this)closeMsgModal()">
+  <div class="msg-modal-box">
+    <div class="msg-modal-header">
+      <div class="msg-modal-title" id="msg-modal-title">Message</div>
+      <button class="msg-modal-close" onclick="closeMsgModal()">✕ Close</button>
+    </div>
+    <div class="msg-modal-meta">
+      <div class="msg-meta-item">
+        <div class="msg-meta-label">From</div>
+        <div class="msg-meta-value" id="mm-name"></div>
+      </div>
+      <div class="msg-meta-item">
+        <div class="msg-meta-label">Email</div>
+        <div class="msg-meta-value" id="mm-email"></div>
+      </div>
+      <div class="msg-meta-item" style="grid-column:span 2">
+        <div class="msg-meta-label">Subject</div>
+        <div class="msg-meta-value" id="mm-subject"></div>
+      </div>
+      <div class="msg-meta-item">
+        <div class="msg-meta-label">Received</div>
+        <div class="msg-meta-value" id="mm-date"></div>
+      </div>
+      <div class="msg-meta-item">
+        <div class="msg-meta-label">Status</div>
+        <div class="msg-meta-value" id="mm-status"></div>
+      </div>
+    </div>
+    <div class="msg-modal-body">
+      <div class="msg-body-label">Message</div>
+      <div class="msg-body-text" id="mm-message"></div>
+    </div>
+    <div class="msg-modal-footer">
+      <button class="btn btn-danger" id="mm-delete-btn">Delete</button>
+      <button class="btn btn-admin" onclick="closeMsgModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  SUPABASE CONFIG
+//  Replace these two values with your
+//  project URL and anon key from:
+//  Supabase Dashboard → Settings → API
+// ══════════════════════════════════════
+const SUPABASE_URL = 'https://mmaeznospyyowqecxdzc.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1tYWV6bm9zcHl5b3dxZWN4ZHpjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMzg1NjAsImV4cCI6MjA5NTYxNDU2MH0.7zfnRkZHKrXNuTiWacwY092QEqxZrPrMIM4oFUzSYm8';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ══════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════
+const tagMap = {Technology:'tag-tech',Design:'tag-design',Culture:'tag-culture',Opinion:'tag-opinion'};
+let POSTS       = [];
+let ADMIN_POSTS = [];
+let AUTHORS     = [];
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+async function init() {
+  await Promise.all([loadAuthors(), loadPosts()]);
+  renderHome();
+  renderAboutAuthors();
+  populateAuthorDropdowns();
+
+  // Restore admin session if user reloaded the page while logged in
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    document.getElementById('admin-user-email').textContent = session.user.email;
+    document.getElementById('public-site').style.display   = 'none';
+    document.getElementById('admin-site').style.display    = 'block';
+    await loadAllPosts();
+    renderAdminPosts();
+    renderCharts();
+    loadAdminStats();
+    document.getElementById('dash-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    startLiveCounter();
+  }
+}
+
+async function loadAuthors() {
+  const { data, error } = await sb.from('authors').select('*').order('name');
+  if (!error) AUTHORS = data || [];
+}
+
+async function loadPosts() {
+  const { data, error } = await sb
+    .from('posts')
+    .select('*, authors(id, name, initials, color)')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false });
+  if (!error && data) POSTS = data.map(mapPost);
+}
+
+async function loadAllPosts() {
+  const { data, error } = await sb
+    .from('posts')
+    .select('*, authors(id, name, initials, color)')
+    .order('published_at', { ascending: false });
+  if (!error && data) ADMIN_POSTS = data.map(mapPost);
+}
+
+function mapPost(p) {
+  const a = p.authors || {};
+  return {
+    ...p,
+    author:         a.name       || 'Unknown',
+    authorInitials: a.initials   || '??',
+    authorColor:    a.color      || '#888',
+    tagClass:       tagMap[p.category] || 'tag-tech',
+    date:           new Date(p.published_at).toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}),
+    readTime:       p.read_time  || '3 min read',
+  };
+}
+
+function populateAuthorDropdowns() {
+  const opts = AUTHORS.map(a => `<option value="${a.id}">${a.name}</option>`).join('');
+  const fallback = '<option value="">No authors found</option>';
+  document.getElementById('np-author').innerHTML = opts || fallback;
+  document.getElementById('ed-author').innerHTML = opts || fallback;
+}
+
+function renderAboutAuthors() {
+  const el = document.getElementById('team-grid');
+  if (!el) return;
+  if (!AUTHORS.length) {
+    el.className  = 'team-grid';
+    el.innerHTML  = '';
+    return;
+  }
+  const solo = AUTHORS.length === 1;
+  el.className = solo ? 'team-grid solo' : 'team-grid';
+  el.innerHTML = AUTHORS.map(a => solo ? `
+    <div class="team-card">
+      <div class="team-avatar" style="background:${a.color}">${a.initials}</div>
+      <div class="team-info">
+        <div class="team-name">${a.name}</div>
+        <div class="team-role">${a.role || ''}</div>
+        <div class="team-bio">${a.bio || ''}</div>
+      </div>
+    </div>` : `
+    <div class="team-card">
+      <div class="team-avatar" style="background:${a.color}">${a.initials}</div>
+      <div class="team-name">${a.name}</div>
+      <div class="team-role">${a.role || ''}</div>
+      <div class="team-bio">${a.bio || ''}</div>
+    </div>`
+  ).join('');
+}
+
+// ══════════════════════════════════════
+//  ROUTING
+// ══════════════════════════════════════
+let currentView  = 'home';
+let prevView     = 'home';
+let activeFilter = 'all';
+let editingId    = null;
+
+function showView(id, btn) {
+  document.querySelectorAll('#public-site .view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.querySelector('#public-site .nav-links').classList.remove('nav-open');
+  prevView = currentView; currentView = id;
+  if (id === 'blog')  renderBlogList(POSTS);
+  if (id === 'home')  renderHome();
+  if (id === 'about') {
+    const el = document.getElementById('about-posts-count');
+    if (el) el.textContent = POSTS.length || '—';
+  }
+  updateSEO();
+}
+
+function goBack() {
+  const target = prevView === 'post' ? 'blog' : (prevView || 'home');
+  const idx = {home:1,blog:2,about:3,contact:4}[target] || 1;
+  showView(target, document.querySelector(`.nav-links button:nth-child(${idx})`));
+}
+
+// ══════════════════════════════════════
+//  RENDER HOME
+// ══════════════════════════════════════
+function renderHome() {
+  const top = document.getElementById('home-posts-top');
+  const bot = document.getElementById('home-posts-bottom');
+  const p   = POSTS;
+  if (!p.length) {
+    top.innerHTML = '<div style="padding:2rem;color:var(--ink-3);font-style:italic">No posts yet.</div>';
+    bot.innerHTML = '';
+    return;
+  }
+
+  top.innerHTML = `<div class="posts-layout">
+    ${p[0] ? `<div class="post-card featured" onclick="openPost('${p[0].id}')">
+      <span class="post-tag ${p[0].tagClass}">${p[0].category}</span>
+      <div class="post-title" style="font-size:28px;line-height:1.2">${p[0].title}</div>
+      <div class="post-excerpt" style="font-size:15px;margin-top:10px">${p[0].excerpt}</div>
+      <div class="post-meta">
+        <div class="author-dot" style="background:${p[0].authorColor}">${p[0].authorInitials}</div>
+        <span>${p[0].author}</span><span class="meta-sep">·</span>
+        <span>${p[0].date}</span><span class="meta-sep">·</span><span>${p[0].readTime}</span>
+      </div></div>` : ''}
+    ${p[1] ? `<div class="post-card" onclick="openPost('${p[1].id}')">
+      <span class="post-tag ${p[1].tagClass}">${p[1].category}</span>
+      <div class="post-title">${p[1].title}</div>
+      <div class="post-excerpt">${p[1].excerpt}</div>
+      <div class="post-meta"><div class="author-dot" style="background:${p[1].authorColor}">${p[1].authorInitials}</div>
+      <span>${p[1].author}</span><span class="meta-sep">·</span><span>${p[1].readTime}</span></div>
+    </div>` : ''}
+  </div>`;
+
+  const rest = p.slice(2, 5);
+  bot.innerHTML = rest.length ? `<div class="posts-layout">${rest.map(post => `
+    <div class="post-card" onclick="openPost('${post.id}')">
+      <span class="post-tag ${post.tagClass}">${post.category}</span>
+      <div class="post-title">${post.title}</div>
+      <div class="post-excerpt">${post.excerpt}</div>
+      <div class="post-meta"><div class="author-dot" style="background:${post.authorColor}">${post.authorInitials}</div>
+      <span>${post.author}</span><span class="meta-sep">·</span><span>${post.readTime}</span></div>
+    </div>`).join('')}</div>` : '';
+
+  const el = document.getElementById('about-posts-count');
+  if (el) el.textContent = POSTS.length;
+}
+
+// ══════════════════════════════════════
+//  BLOG LIST
+// ══════════════════════════════════════
+function renderBlogList(posts) {
+  document.getElementById('post-count').textContent = posts.length + ' article' + (posts.length !== 1 ? 's' : '');
+  document.getElementById('blog-list').innerHTML = posts.map((p, i) => `
+    <div class="blog-item" onclick="openPost('${p.id}')">
+      <div class="blog-item-num">${String(i+1).padStart(2,'0')}</div>
+      <div>
+        <div class="blog-item-meta" style="margin-bottom:8px"><span class="post-tag ${p.tagClass}" style="margin:0">${p.category}</span></div>
+        <div class="blog-item-title">${p.title}</div>
+        <div class="blog-item-excerpt">${p.excerpt}</div>
+        <div class="post-meta">
+          <div class="author-dot" style="background:${p.authorColor}">${p.authorInitials}</div>
+          <span>${p.author}</span><span class="meta-sep">·</span>
+          <span>${p.date}</span><span class="meta-sep">·</span>
+          <span class="reading-time">${p.readTime}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function filterPosts(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBlogList(cat === 'all' ? POSTS : POSTS.filter(p => p.category === cat));
+}
+
+function searchPosts(q) {
+  const term = q.toLowerCase();
+  const base = activeFilter === 'all' ? POSTS : POSTS.filter(p => p.category === activeFilter);
+  renderBlogList(!term ? base : base.filter(p =>
+    p.title.toLowerCase().includes(term) || p.excerpt.toLowerCase().includes(term)
+  ));
+}
+
+// ══════════════════════════════════════
+//  SINGLE POST
+// ══════════════════════════════════════
+function openPost(id) {
+  const post = POSTS.find(p => p.id === id);
+  if (!post) return;
+  prevView = currentView;
+  document.querySelectorAll('#public-site .view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-post').classList.add('active');
+  currentView = 'post';
+
+  document.getElementById('post-header-full').innerHTML = `
+    <div class="post-full-header">
+      <div style="margin-bottom:12px"><span class="post-tag ${post.tagClass}">${post.category}</span></div>
+      <div class="post-full-title">${post.title}</div>
+      <div class="post-full-excerpt">${post.excerpt}</div>
+      <div class="post-meta">
+        <div class="author-dot" style="background:${post.authorColor};width:36px;height:36px;font-size:12px">${post.authorInitials}</div>
+        <div><div style="font-size:14px;font-weight:500;color:var(--ink)">${post.author}</div>
+        <div style="font-size:12px;color:var(--ink-3)">${post.date} · ${post.readTime}</div></div>
+      </div>
+    </div>`;
+  document.getElementById('post-body-full').innerHTML = renderBody(post.body);
+  updateSEO({ title: post.title, description: post.excerpt });
+}
+
+function renderBody(md) {
+  if (!md) return '';
+  return md.split('\n\n').map(block => {
+    if (block.startsWith('## ')) return `<h2>${block.slice(3)}</h2>`;
+    if (block.startsWith('> '))  return `<blockquote>${block.slice(2)}</blockquote>`;
+    if (block.startsWith('```')) {
+      const inner = block.replace(/^```[a-z]*\n?/,'').replace(/\n?```$/,'');
+      return `<pre><code>${inner.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`;
+    }
+    return `<p>${block
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,'<em>$1</em>')
+      .replace(/`(.+?)`/g,'<code>$1</code>')}</p>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════
+//  SUBSCRIBE MODAL
+// ══════════════════════════════════════
+function openSubscribeModal() {
+  document.getElementById('subscribe-overlay').classList.remove('hidden');
+  setTimeout(() => document.getElementById('sub-email').focus(), 100);
+}
+function closeSubscribeModal() {
+  document.getElementById('subscribe-overlay').classList.add('hidden');
+  document.getElementById('sub-email').value     = '';
+  document.getElementById('sub-msg').textContent = '';
+  document.getElementById('sub-msg').className   = 'sub-msg';
+}
+
+async function handleSubscribeForm(e) {
+  e.preventDefault();
+  const email = document.getElementById('sub-email').value.trim();
+  const btn   = document.getElementById('sub-btn');
+  const msg   = document.getElementById('sub-msg');
+
+  btn.textContent = 'Subscribing…';
+  btn.disabled    = true;
+  msg.textContent = '';
+  msg.className   = 'sub-msg';
+
+  const { error } = await sb.from('subscribers').insert({
+    email,
+    source: 'Homepage',
+    status: 'active',
+  });
+
+  btn.textContent = 'Subscribe →';
+  btn.disabled    = false;
+
+  if (error) {
+    const already = error.code === '23505'; // unique-violation = already subscribed
+    msg.textContent = already
+      ? 'You\'re already subscribed!'
+      : 'Something went wrong. Please try again.';
+    msg.className = 'sub-msg ' + (already ? 'success' : 'error');
+    return;
+  }
+
+  msg.textContent = '✓ You\'re subscribed — welcome aboard!';
+  msg.className   = 'sub-msg success';
+  document.getElementById('sub-email').value = '';
+  setTimeout(closeSubscribeModal, 2500);
+}
+
+async function notifySubscribers(title, excerpt) {
+  // Invokes the Supabase Edge Function that emails all active subscribers.
+  // See: supabase/functions/notify-subscribers/index.ts
+  try {
+    await sb.functions.invoke('notify-subscribers', {
+      body: { title, excerpt, siteUrl: window.location.origin },
+    });
+  } catch {
+    // Non-critical — the post is already live, email is best-effort.
+  }
+}
+
+// ══════════════════════════════════════
+//  LOGIN / AUTH
+// ══════════════════════════════════════
+function openLogin() {
+  document.getElementById('login-overlay').classList.remove('hidden');
+  document.getElementById('login-email').value = '';
+  document.getElementById('login-pass').value  = '';
+  document.getElementById('login-error').style.display = 'none';
+  setTimeout(() => document.getElementById('login-email').focus(), 100);
+}
+
+function closeLogin() {
+  document.getElementById('login-overlay').classList.add('hidden');
+}
+
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  const err   = document.getElementById('login-error');
+  const btn   = document.getElementById('login-btn');
+
+  err.style.display = 'none';
+  btn.textContent = 'Signing in…';
+  btn.disabled = true;
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+
+  btn.textContent = 'Sign In →';
+  btn.disabled = false;
+
+  if (error) {
+    err.style.display = 'block';
+    document.getElementById('login-pass').value = '';
+    document.getElementById('login-pass').focus();
+    return;
+  }
+
+  closeLogin();
+  document.getElementById('admin-user-email').textContent = data.user.email;
+  document.getElementById('public-site').style.display  = 'none';
+  document.getElementById('admin-site').style.display   = 'block';
+  await loadAllPosts();
+  renderAdminPosts();
+  renderCharts();
+  loadAdminStats();
+  document.getElementById('dash-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  startLiveCounter();
+}
+
+async function exitAdmin() {
+  await sb.auth.signOut();
+  document.getElementById('admin-site').style.display  = 'none';
+  document.getElementById('public-site').style.display = 'block';
+  renderHome();
+}
+
+// ══════════════════════════════════════
+//  ADMIN NAV
+// ══════════════════════════════════════
+function showAdminPanel(id, btn) {
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  if (id === 'posts')       loadAllPosts().then(renderAdminPosts);
+  if (id === 'subscribers') loadSubscribers();
+  if (id === 'donors')      loadDonors();
+  if (id === 'messages')    loadMessages();
+}
+
+// ══════════════════════════════════════
+//  ADMIN STATS (dashboard KPIs)
+// ══════════════════════════════════════
+async function loadAdminStats() {
+  const [postsRes, subsRes, donorsRes] = await Promise.all([
+    sb.from('posts').select('id', { count: 'exact', head: true }).eq('status', 'published'),
+    sb.from('subscribers').select('id', { count: 'exact', head: true }).eq('status', 'active'),
+    sb.from('donors').select('amount'),
+  ]);
+
+  if (postsRes.count != null) {
+    document.getElementById('dash-posts').textContent       = postsRes.count;
+    document.getElementById('posts-table-count').textContent = postsRes.count + ' posts';
+  }
+  if (subsRes.count != null) {
+    document.getElementById('dash-subs').textContent = subsRes.count.toLocaleString();
+  }
+  if (donorsRes.data) {
+    const total = donorsRes.data.reduce((s, d) => s + Number(d.amount), 0);
+    document.getElementById('dash-donations').textContent = '$' + total.toLocaleString();
+  }
+}
+
+// ══════════════════════════════════════
+//  ADMIN POSTS TABLE
+// ══════════════════════════════════════
+function renderAdminPosts() {
+  const posts = ADMIN_POSTS.length ? ADMIN_POSTS : POSTS;
+  document.getElementById('posts-table-count').textContent = posts.length + ' posts';
+  document.getElementById('posts-table').innerHTML = `
+    <tr><th>#</th><th>Title</th><th>Category</th><th>Author</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+    ${posts.map((p,i) => `<tr>
+      <td style="color:var(--admin-muted)">${i+1}</td>
+      <td title="${p.title}">${p.title.length>50?p.title.slice(0,50)+'…':p.title}</td>
+      <td><span class="status-pill" style="background:rgba(79,142,247,.12);color:var(--admin-accent)">${p.category}</span></td>
+      <td>${p.author}</td>
+      <td>${p.date}</td>
+      <td><span class="status-pill ${p.status==='published'?'status-pub':'status-draft'}">${p.status==='published'?'Published':'Draft'}</span></td>
+      <td><div class="td-actions">
+        <button class="btn btn-warn"   onclick="openEditor('${p.id}')">Edit</button>
+        <button class="btn btn-danger" onclick="deletePost('${p.id}')">Delete</button>
+      </div></td>
+    </tr>`).join('')}`;
+}
+
+async function deletePost(id) {
+  if (!confirm('Delete this post permanently?')) return;
+  const { error } = await sb.from('posts').delete().eq('id', id);
+  if (error) { showToast('Delete failed: ' + error.message, 'error'); return; }
+  await Promise.all([loadPosts(), loadAllPosts()]);
+  renderAdminPosts();
+  renderHome();
+  showToast('Post deleted', 'error');
+}
+
+// ══════════════════════════════════════
+//  EDITOR MODAL
+// ══════════════════════════════════════
+function openEditor(id) {
+  editingId = id;
+  const pool = ADMIN_POSTS.length ? ADMIN_POSTS : POSTS;
+  const post = pool.find(p => p.id === id);
+  if (!post) return;
+
+  document.getElementById('ed-title').value   = post.title;
+  document.getElementById('ed-excerpt').value = post.excerpt  || '';
+  document.getElementById('ed-body').value    = post.body     || '';
+  document.getElementById('ed-tag').value     = post.category;
+  document.getElementById('ed-author').value  = post.author_id || '';
+  edPreview();
+  document.getElementById('editor-modal').classList.remove('hidden');
+}
+
+function closeEditor() {
+  document.getElementById('editor-modal').classList.add('hidden');
+  editingId = null;
+}
+
+async function saveEdit() {
+  if (!editingId) return;
+  const tag      = document.getElementById('ed-tag').value;
+  const authorId = document.getElementById('ed-author').value;
+
+  const { error } = await sb.from('posts').update({
+    title:     document.getElementById('ed-title').value,
+    excerpt:   document.getElementById('ed-excerpt').value,
+    body:      document.getElementById('ed-body').value,
+    category:  tag,
+    author_id: authorId || null,
+  }).eq('id', editingId);
+
+  if (error) { showToast('Save failed: ' + error.message, 'error'); return; }
+
+  closeEditor();
+  await Promise.all([loadPosts(), loadAllPosts()]);
+  renderAdminPosts();
+  renderHome();
+  renderBlogList(POSTS);
+  showToast('Post updated ✓', 'success');
+}
+
+function edPreview() {
+  const t = document.getElementById('ed-title').value;
+  const e = document.getElementById('ed-excerpt').value;
+  const b = document.getElementById('ed-body').value;
+  document.getElementById('ed-preview').innerHTML = `
+    ${t?`<div class="preview-title">${t}</div>`:''}
+    ${e?`<div class="preview-excerpt">${e}</div>`:''}
+    ${b?`<div class="preview-body-text">${renderBody(b)}</div>`:''}`;
+}
+
+function edInsert(before, after) {
+  const ta = document.getElementById('ed-body');
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  const sel = ta.value.slice(s,e);
+  ta.value = ta.value.slice(0,s)+before+sel+after+ta.value.slice(e);
+  ta.selectionStart = s+before.length; ta.selectionEnd = s+before.length+sel.length;
+  ta.focus(); edPreview();
+}
+
+// ══════════════════════════════════════
+//  NEW POST
+// ══════════════════════════════════════
+function npPreview() {
+  const t = document.getElementById('np-title').value;
+  const e = document.getElementById('np-excerpt').value;
+  const b = document.getElementById('np-body').value;
+  document.getElementById('np-preview').innerHTML = (t||e||b) ? `
+    ${t?`<div class="preview-title" style="font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink);margin-bottom:8px">${t}</div>`:''}
+    ${e?`<div class="preview-excerpt" style="font-family:var(--serif);font-style:italic;font-size:14px;color:var(--ink-2);margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--paper-3)">${e}</div>`:''}
+    ${b?`<div style="font-size:13px;line-height:1.8;color:var(--ink-2)">${renderBody(b)}</div>`:''}` :
+    '<span style="font-size:13px;color:var(--ink-3);font-style:italic">Start writing to preview…</span>';
+}
+
+function npInsert(before, after) {
+  const ta = document.getElementById('np-body');
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  const sel = ta.value.slice(s,e);
+  ta.value = ta.value.slice(0,s)+before+sel+after+ta.value.slice(e);
+  ta.selectionStart = s+before.length; ta.selectionEnd = s+before.length+sel.length;
+  ta.focus(); npPreview();
+}
+
+async function publishNewPost() {
+  const title = document.getElementById('np-title').value.trim();
+  if (!title) { showToast('Please add a title', 'error'); return; }
+
+  const tag      = document.getElementById('np-tag').value;
+  const authorId = document.getElementById('np-author').value;
+  const bodyText = document.getElementById('np-body').value;
+  const excerpt  = document.getElementById('np-excerpt').value;
+  const readTime = Math.max(1, Math.ceil(bodyText.split(' ').length / 200)) + ' min read';
+
+  const { error } = await sb.from('posts').insert({
+    title,
+    excerpt,
+    body:         bodyText,
+    category:     tag,
+    author_id:    authorId || null,
+    status:       'published',
+    read_time:    readTime,
+    published_at: new Date().toISOString(),
+  });
+
+  if (error) { showToast('Publish failed: ' + error.message, 'error'); return; }
+
+  document.getElementById('np-title').value   = '';
+  document.getElementById('np-excerpt').value = '';
+  document.getElementById('np-body').value    = '';
+  document.getElementById('np-preview').innerHTML = '<span style="font-size:13px;color:var(--ink-3);font-style:italic">Start writing to preview…</span>';
+
+  await Promise.all([loadPosts(), loadAllPosts()]);
+  renderAdminPosts();
+  renderHome();
+  showToast('Post published ✓', 'success');
+  notifySubscribers(title, excerpt);
+  showAdminPanel('posts', document.querySelector('.sidebar-btn:nth-child(5)'));
+}
+
+async function saveDraft() {
+  const title = document.getElementById('np-title').value.trim();
+  if (!title) { showToast('Please add a title', 'error'); return; }
+
+  const tag      = document.getElementById('np-tag').value;
+  const authorId = document.getElementById('np-author').value;
+  const bodyText = document.getElementById('np-body').value;
+  const readTime = Math.max(1, Math.ceil(bodyText.split(' ').length / 200)) + ' min read';
+
+  const { error } = await sb.from('posts').insert({
+    title,
+    excerpt:      document.getElementById('np-excerpt').value,
+    body:         bodyText,
+    category:     tag,
+    author_id:    authorId || null,
+    status:       'draft',
+    read_time:    readTime,
+    published_at: new Date().toISOString(),
+  });
+
+  if (error) { showToast('Draft save failed: ' + error.message, 'error'); return; }
+  showToast('Draft saved ✓', 'success');
+}
+
+// ══════════════════════════════════════
+//  SUBSCRIBERS
+// ══════════════════════════════════════
+async function loadSubscribers() {
+  const { data, error } = await sb
+    .from('subscribers')
+    .select('*')
+    .order('joined_at', { ascending: false })
+    .limit(100);
+
+  if (error) { showToast('Failed to load subscribers', 'error'); return; }
+
+  const active      = data.filter(s => s.status === 'active').length;
+  const unsubscribed = data.filter(s => s.status === 'unsubscribed').length;
+
+  const totalEl = document.getElementById('subs-total');
+  const unsubEl = document.getElementById('subs-unsubbed');
+  if (totalEl) totalEl.textContent = active.toLocaleString();
+  if (unsubEl) unsubEl.textContent = unsubscribed;
+
+  document.getElementById('subscribers-list').innerHTML = data.length ? data.map(s => {
+    const date  = new Date(s.joined_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const cls   = s.status === 'active' ? 'status-pub' : s.status === 'pending' ? 'status-draft' : '';
+    const style = s.status === 'unsubscribed' ? 'style="background:rgba(224,82,82,.12);color:#e05252"' : '';
+    const label = s.status.charAt(0).toUpperCase() + s.status.slice(1);
+    return `<tr>
+      <td>${s.email}</td>
+      <td>${date}</td>
+      <td>${s.source || '—'}</td>
+      <td><span class="status-pill ${cls}" ${style}>${label}</span></td>
+    </tr>`;
+  }).join('') : '<tr><td colspan="4" style="text-align:center;color:var(--admin-muted);padding:2rem">No subscribers yet.</td></tr>';
+}
+
+// ══════════════════════════════════════
+//  DONORS
+// ══════════════════════════════════════
+async function loadDonors() {
+  const { data, error } = await sb
+    .from('donors')
+    .select('*')
+    .order('donated_at', { ascending: false })
+    .limit(100);
+
+  if (error) { showToast('Failed to load donors', 'error'); return; }
+
+  const total     = data.reduce((s, d) => s + Number(d.amount), 0);
+  const recurring = data.filter(d => d.is_recurring).length;
+  const avg       = data.length ? total / data.length : 0;
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  set('donors-total',     '$' + total.toLocaleString());
+  set('donors-count',     data.length);
+  set('donors-avg',       '$' + Math.round(avg));
+  set('donors-recurring', recurring);
+
+  document.getElementById('donors-list').innerHTML = data.length ? data.map(d => {
+    const date   = new Date(d.donated_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const amount = d.is_recurring ? `$${d.amount}/mo` : `$${d.amount}`;
+    const typeAttr = d.donation_type === 'recurring'
+      ? 'class="status-pill status-pub"'
+      : d.donation_type === 'sponsor'
+      ? 'class="status-pill" style="background:rgba(200,148,10,.12);color:#c8940a"'
+      : 'class="status-pill" style="background:rgba(79,142,247,.12);color:#4f8ef7"';
+    const typeLabel = d.donation_type.charAt(0).toUpperCase() + d.donation_type.slice(1);
+    return `<tr>
+      <td>${d.name || 'Anonymous'}</td>
+      <td style="color:#4caf87">${amount}</td>
+      <td>${date}</td>
+      <td><span ${typeAttr}>${typeLabel}</span></td>
+      <td style="font-style:italic;color:var(--admin-muted)">${d.message || '—'}</td>
+    </tr>`;
+  }).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--admin-muted);padding:2rem">No donors yet.</td></tr>';
+}
+
+// ══════════════════════════════════════
+//  CHARTS
+// ══════════════════════════════════════
+function renderCharts() {
+  const traffic = [1240,980,1540,2100,1820,2340,1980];
+  const days    = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const max     = Math.max(...traffic);
+  document.getElementById('traffic-chart').innerHTML = traffic.map((v,i) => `
+    <div class="bar-col">
+      <div class="bar-fill" style="height:${Math.round((v/max)*100)}%;background:var(--admin-accent)" title="${v} visitors"></div>
+      <div class="bar-label">${days[i]}</div>
+    </div>`).join('');
+
+  const subs   = [820,870,910,960,1010,1080,1140,1180,1220,1250,1270,1284];
+  const months = ['J','F','M','A','M','J','J','A','S','O','N','D'];
+  const subMax = Math.max(...subs);
+  document.getElementById('subscriber-chart').innerHTML = subs.map((v,i) => `
+    <div class="bar-col">
+      <div class="bar-fill" style="height:${Math.round((v/subMax)*100)}%;background:#4caf87" title="${v} subscribers"></div>
+      <div class="bar-label">${months[i]}</div>
+    </div>`).join('');
+
+  const vis    = [8200,9100,10400,11800,12600,13100,13800,12900,13400,14000,14200,0];
+  const visMax = Math.max(...vis.filter(Boolean));
+  document.getElementById('visitors-chart').innerHTML = vis.map((v,i) => `
+    <div class="bar-col">
+      <div class="bar-fill" style="height:${v?Math.round((v/visMax)*100):0}%;background:#c8940a;${!v?'opacity:.2':''}" title="${v||'—'}"></div>
+      <div class="bar-label">${months[i]}</div>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════
+//  LIVE COUNTER
+// ══════════════════════════════════════
+function startLiveCounter() {
+  const el = document.getElementById('live-visitors');
+  setInterval(() => {
+    el.textContent = Math.max(20, 47 + Math.floor(Math.random()*20) - 8);
+  }, 4000);
+}
+
+// ══════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className   = 'toast' + (type ? ' ' + type : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ══════════════════════════════════════
+//  REALTIME — public ↔ admin sync
+// ══════════════════════════════════════
+sb.channel('posts-realtime')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, async () => {
+    await loadPosts();
+    renderHome();
+    if (currentView === 'blog') renderBlogList(POSTS);
+    const adminVisible = document.getElementById('admin-site').style.display !== 'none';
+    if (adminVisible) {
+      await loadAllPosts();
+      renderAdminPosts();
+      loadAdminStats();
+    }
+  })
+  .subscribe();
+
+// ══════════════════════════════════════
+//  NAV TOGGLE (mobile)
+// ══════════════════════════════════════
+function toggleNav() {
+  document.querySelector('#public-site .nav-links').classList.toggle('nav-open');
+}
+
+// ══════════════════════════════════════
+//  SEO — dynamic meta updates
+// ══════════════════════════════════════
+const SEO_DEFAULTS = {
+  title:       'GracyBlog — Grace Apenda | Paediatric Pharmacist & Writer',
+  description: 'GracyBlog is the personal blog of Grace Apenda — Paediatric Pharmacist at Port Moresby General Hospital, Papua New Guinea. Writing on medicine, health, culture, and everyday life.',
+};
+function setMeta(name, content, prop) {
+  const sel = prop ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+  let el = document.querySelector(sel);
+  if (!el) {
+    el = document.createElement('meta');
+    prop ? el.setAttribute('property', name) : el.setAttribute('name', name);
+    document.head.appendChild(el);
+  }
+  el.setAttribute('content', content);
+}
+function updateSEO({ title, description } = {}) {
+  const t = title       ? title + ' — GracyBlog'    : SEO_DEFAULTS.title;
+  const d = description || SEO_DEFAULTS.description;
+  document.title = t;
+  setMeta('description', d);
+  setMeta('og:title',       t,    true);
+  setMeta('og:description', d,    true);
+  setMeta('twitter:title',       t);
+  setMeta('twitter:description', d);
+}
+
+// ══════════════════════════════════════
+//  CONTACT FORM
+// ══════════════════════════════════════
+async function handleContactForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById('cf-btn');
+  const msg = document.getElementById('cf-msg');
+  const name    = document.getElementById('cf-name').value.trim();
+  const email   = document.getElementById('cf-email').value.trim();
+  const subject = document.getElementById('cf-subject').value.trim();
+  const message = document.getElementById('cf-message').value.trim();
+
+  btn.textContent = 'Sending…';
+  btn.disabled    = true;
+  msg.textContent = '';
+  msg.className   = 'contact-msg';
+
+  const { error } = await sb.from('contact_messages').insert({ name, email, subject, message });
+
+  btn.textContent = 'Send Message →';
+  btn.disabled    = false;
+
+  if (error) {
+    msg.textContent = 'Something went wrong. Please try again or email me directly.';
+    msg.className   = 'contact-msg error';
+    return;
+  }
+
+  msg.textContent = '✓ Message sent! I\'ll get back to you soon.';
+  msg.className   = 'contact-msg success';
+  document.getElementById('contact-form').reset();
+}
+
+// ══════════════════════════════════════
+//  ADMIN MESSAGES
+// ══════════════════════════════════════
+async function loadMessages() {
+  const { data, error } = await sb
+    .from('contact_messages')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(100);
+
+  if (error) { showToast('Failed to load messages', 'error'); return; }
+
+  const total = data.length;
+  const unread = data.filter(m => !m.read).length;
+  const countEl = document.getElementById('messages-count');
+  if (countEl) countEl.textContent = total + ' message' + (total !== 1 ? 's' : '') + (unread ? ` · ${unread} unread` : '');
+
+  const tbody = document.getElementById('messages-table');
+  if (!tbody) return;
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--admin-muted);font-style:italic;padding:2rem">No messages yet.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(m => `
+    <tr class="msg-row${m.read ? '' : ' unread'}">
+      <td style="width:24px">${m.read ? '' : '<span class="msg-unread-dot"></span>'}</td>
+      <td>${m.name}</td>
+      <td style="font-size:12px">${m.email}</td>
+      <td title="${m.message}">${m.subject.length > 50 ? m.subject.slice(0,50)+'…' : m.subject}</td>
+      <td style="white-space:nowrap">${new Date(m.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</td>
+      <td><div class="td-actions">
+        <button class="btn btn-admin" onclick="viewMessage('${m.id}')">View</button>
+        <button class="btn btn-danger" onclick="deleteMessage('${m.id}')">Delete</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+let _currentMsgId = null;
+
+async function viewMessage(id) {
+  const { data, error } = await sb.from('contact_messages').select('*').eq('id', id).single();
+  if (error || !data) { showToast('Could not load message', 'error'); return; }
+
+  _currentMsgId = data.id;
+
+  const isUnread = !data.read;
+  const titleEl  = document.getElementById('msg-modal-title');
+  titleEl.innerHTML = isUnread
+    ? '<span class="msg-unread-dot"></span> New Message'
+    : 'Message';
+
+  document.getElementById('mm-name').textContent    = data.name;
+  document.getElementById('mm-email').textContent   = data.email;
+  document.getElementById('mm-subject').textContent = data.subject;
+  document.getElementById('mm-date').textContent    = new Date(data.created_at).toLocaleString('en-US',{
+    month:'long', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit'
+  });
+  document.getElementById('mm-status').innerHTML = isUnread
+    ? '<span style="color:var(--admin-accent)">● Unread</span>'
+    : '<span style="color:var(--admin-muted)">✓ Read</span>';
+  document.getElementById('mm-message').textContent = data.message;
+
+  document.getElementById('mm-delete-btn').onclick = () => {
+    closeMsgModal();
+    deleteMessage(data.id);
+  };
+
+  document.getElementById('msg-modal').classList.remove('hidden');
+
+  if (isUnread) {
+    await sb.from('contact_messages').update({ read: true }).eq('id', id);
+    loadMessages();
+  }
+}
+
+function closeMsgModal() {
+  document.getElementById('msg-modal').classList.add('hidden');
+  _currentMsgId = null;
+}
+
+async function deleteMessage(id) {
+  if (!confirm('Delete this message permanently?')) return;
+  const { error } = await sb.from('contact_messages').delete().eq('id', id);
+  if (error) { showToast('Delete failed', 'error'); return; }
+  loadMessages();
+  showToast('Message deleted', 'error');
+}
+
+// ══════════════════════════════════════
+//  BOOTSTRAP
+// ══════════════════════════════════════
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+init();
+</script>
+</body>
+</html>
